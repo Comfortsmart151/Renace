@@ -1,12 +1,35 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="es">
   <head>
     <meta charset="UTF-8" />
-    <title>Renace · Emotional To-Do</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- ================================
+         SEO & TÍTULO
+    ================================= -->
+    <title>Renace</title>
+
+    <!-- PWA MANIFEST -->
+    <link rel="manifest" href="/manifest.json" />
+
+    <!-- THEME COLOR PARA STATUS BAR -->
+    <meta name="theme-color" content="#8856FF" />
+
+    <!-- APP ICON PARA IOS -->
+    <link rel="apple-touch-icon" href="/icons/icon-192.png" />
+
+    <!-- Fuente (opcional, si quieres) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap"
+      rel="stylesheet"
+    />
+
   </head>
+
   <body>
     <div id="root"></div>
+
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>
