@@ -1,0 +1,9 @@
+{
+  "name": "Renace Emotional To-Do",
+  "short_name": "Renace",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#0b1020",
+  "theme_color": "#c4a1ff",
+  "icons": []
+}
