@@ -1,16 +1,20 @@
+// src/pages/Achievements.jsx
 import React, { useMemo, useEffect, useState } from "react";
 import { ACHIEVEMENTS } from "../data/AchievementsList";
 import { playSound } from "../utils/playSound";
 
 export function Achievements({ tasks, intentions }) {
+  /* ===============================
+            CALCULOS
+  =============================== */
   const data = useMemo(() => {
     const done = tasks.filter((t) => t.done);
-    const todayStr = new Date().toISOString().slice(0, 10);
+    const today = new Date().toISOString().slice(0, 10);
 
     return {
       doneCount: done.length,
 
-      completedToday: done.filter((t) => t.date === todayStr).length,
+      completedToday: done.filter((t) => t.date === today).length,
 
       doneByEmotion: done.reduce((acc, t) => {
         acc[t.emotion] = (acc[t.emotion] || 0) + 1;
@@ -18,9 +22,7 @@ export function Achievements({ tasks, intentions }) {
       }, {}),
 
       uniqueEmotionsToday: new Set(
-        done
-          .filter((t) => t.date === todayStr)
-          .map((t) => t.emotion)
+        done.filter((t) => t.date === today).map((t) => t.emotion)
       ).size,
 
       intentionStreak: calculateIntentionStreak(intentions),
@@ -33,66 +35,150 @@ export function Achievements({ tasks, intentions }) {
     };
   }, [tasks, intentions]);
 
+  /* ===============================
+          SONIDO DE NUEVOS LOGROS
+  =============================== */
   const [initialized, setInitialized] = useState(false);
-  const [prevUnlockedCount, setPrevUnlockedCount] = useState(0);
+  const [prevUnlocked, setPrevUnlocked] = useState(0);
 
   useEffect(() => {
     const unlockedNow = ACHIEVEMENTS.filter((a) => a.check(data)).length;
 
     if (!initialized) {
-      setPrevUnlockedCount(unlockedNow);
+      setPrevUnlocked(unlockedNow);
       setInitialized(true);
       return;
     }
 
-    if (unlockedNow > prevUnlockedCount) {
-      playSound("achievement-unlock", 0.5);
-      setPrevUnlockedCount(unlockedNow);
+    if (unlockedNow > prevUnlocked) {
+      playSound("achievement-unlock", 0.55);
+      setPrevUnlocked(unlockedNow);
     }
-  }, [data, initialized, prevUnlockedCount]);
+  }, [data, initialized, prevUnlocked]);
+
+  /* ===============================
+          UI PREMIUM
+  =============================== */
 
   return (
-    <section className="achievements-page">
-      {ACHIEVEMENTS.map((ach) => {
-        const unlocked = ach.check(data);
-        const progress = ach.progress(data);
+    <div className="page-shell" data-tab="achievements">
+      <div className="card">
+        <div className="card-header">
+          <span className="card-title">Logros obtenidos</span>
+        </div>
+        <p className="reflection-text" style={{ marginTop: "6px" }}>
+          Avanza a tu ritmo. Renace celebra incluso tus pequeños pasos.
+        </p>
+      </div>
 
-        return (
-          <div
-            key={ach.id}
-            className={`achievement-card glass ${
-              unlocked ? "unlocked" : "locked"
-            }`}
-          >
-            <div className="achievement-icon">{ach.icon}</div>
+      {/* LISTA DE LOGROS */}
+      <div style={{ marginTop: "16px", display: "flex", flexDirection: "column", gap: "14px" }}>
+        {ACHIEVEMENTS.map((ach) => {
+          const unlocked = ach.check(data);
+          const progress = ach.progress(data);
 
-            <div className="achievement-content">
-              <h4>{ach.title}</h4>
+          return (
+            <div
+              key={ach.id}
+              className="card premium-hover"
+              style={{
+                display: "flex",
+                gap: "14px",
+                alignItems: "center",
+                opacity: unlocked ? 1 : 0.55,
+                border: unlocked
+                  ? "1px solid var(--renace-primary)"
+                  : "1px solid rgba(255,255,255,0.06)",
+                position: "relative",
+              }}
+            >
+              {/* ICONO */}
+              <div
+                className="chip"
+                style={{
+                  fontSize: "1.4rem",
+                  padding: "10px 14px",
+                  borderRadius: "14px",
+                  background: unlocked
+                    ? "rgba(129, 140, 248, 0.25)"
+                    : "rgba(255,255,255,0.03)",
+                }}
+              >
+                {ach.icon}
+              </div>
 
-              <p>
-                {ach.description}
-                {!unlocked && ach.goal > 1 && ` (${Math.floor(progress)}%)`}
-              </p>
+              {/* CONTENIDO */}
+              <div style={{ flex: 1 }}>
+                <p
+                  style={{
+                    fontSize: "0.95rem",
+                    fontWeight: 600,
+                    margin: 0,
+                    color: "var(--renace-text-main)",
+                  }}
+                >
+                  {ach.title}
+                </p>
 
-              {!unlocked && ach.goal > 1 && (
-                <div className="achievement-progress">
+                <p
+                  style={{
+                    fontSize: "0.8rem",
+                    marginTop: "2px",
+                    color: "var(--renace-text-muted)",
+                    lineHeight: "1.3",
+                  }}
+                >
+                  {ach.description}
+                </p>
+
+                {/* BARRA DE PROGRESO */}
+                {!unlocked && ach.goal > 1 && (
                   <div
-                    className={`achievement-progress-fill ${ach.progressColor}`}
-                    style={{ width: `${progress}%` }}
-                  />
-                </div>
+                    style={{
+                      marginTop: "8px",
+                      width: "100%",
+                      height: "6px",
+                      borderRadius: "6px",
+                      background: "rgba(255,255,255,0.06)",
+                      overflow: "hidden",
+                    }}
+                  >
+                    <div
+                      style={{
+                        width: `${progress}%`,
+                        height: "100%",
+                        background:
+                          "linear-gradient(90deg, var(--renace-primary), #a78bfa)",
+                        transition: "width 0.4s ease",
+                      }}
+                    />
+                  </div>
+                )}
+              </div>
+
+              {/* CHECKMARK */}
+              {unlocked && (
+                <span
+                  style={{
+                    fontSize: "1.3rem",
+                    color: "var(--renace-primary)",
+                    fontWeight: "600",
+                  }}
+                >
+                  ✓
+                </span>
               )}
             </div>
-
-            {unlocked && <span className="checkmark">✓</span>}
-          </div>
-        );
-      })}
-    </section>
+          );
+        })}
+      </div>
+    </div>
   );
 }
 
-/* Helper: racha de intenciones */
+/* ===============================
+    Racha de intenciones
+=============================== */
 function calculateIntentionStreak(intentions) {
   const set = new Set(intentions.map((i) => i.date));
   let streak = 0;

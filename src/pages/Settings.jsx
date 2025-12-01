@@ -1,54 +1,118 @@
+// src/pages/Settings.jsx
 import React, { useEffect, useState } from "react";
 
 export function Settings() {
   const [reducedMotion, setReducedMotion] = useState(false);
   const [denseMode, setDenseMode] = useState(false);
 
+  /* ===============================
+        Aplicar configuración
+  =============================== */
   useEffect(() => {
     document.body.dataset.reducedMotion = reducedMotion ? "true" : "false";
     document.body.dataset.denseMode = denseMode ? "true" : "false";
   }, [reducedMotion, denseMode]);
 
+  /* ===============================
+            UI PREMIUM
+  =============================== */
   return (
-    <section className="settings-page">
-      <div className="card glass">
-        <h3>Experiencia visual</h3>
+    <div className="page-shell" data-tab="settings">
+      
+      {/* TARJETA: Experiencia visual */}
+      <div className="card">
+        <div className="card-header">
+          <span className="card-title">Experiencia visual</span>
+        </div>
 
-        <label className="toggle">
-          <input
-            type="checkbox"
-            checked={reducedMotion}
-            onChange={(e) => setReducedMotion(e.target.checked)}
-          />
-          <span className="toggle-label">
-            Reducir animaciones y brillo
-            <small>
-              Ideal si prefieres menos movimiento o estás cansado/a visualmente.
+        {/* Toggle 1 */}
+        <div className="field-group" style={{ marginTop: "10px" }}>
+          <label className="field-label" style={{ display: "block" }}>
+            <span style={{ fontSize: "0.9rem", fontWeight: 500 }}>
+              Reducir animaciones y brillo
+            </span>
+          </label>
+
+          <div
+            style={{
+              marginTop: "6px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+            }}
+          >
+            <small style={{ color: "var(--renace-text-muted)" }}>
+              Ideal si te sientes cansado visualmente.
             </small>
-          </span>
-        </label>
 
-        <label className="toggle">
-          <input
-            type="checkbox"
-            checked={denseMode}
-            onChange={(e) => setDenseMode(e.target.checked)}
-          />
-          <span className="toggle-label">
-            Modo compacto
-            <small>Reduce espacios y muestra más contenido en pantalla.</small>
-          </span>
-        </label>
+            <input
+              type="checkbox"
+              checked={reducedMotion}
+              onChange={(e) => setReducedMotion(e.target.checked)}
+              style={{
+                width: "42px",
+                height: "22px",
+                accentColor: "var(--renace-primary)",
+              }}
+            />
+          </div>
+        </div>
+
+        {/* Toggle 2 */}
+        <div className="field-group" style={{ marginTop: "18px" }}>
+          <label className="field-label" style={{ display: "block" }}>
+            <span style={{ fontSize: "0.9rem", fontWeight: 500 }}>
+              Modo compacto
+            </span>
+          </label>
+
+          <div
+            style={{
+              marginTop: "6px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+            }}
+          >
+            <small style={{ color: "var(--renace-text-muted)" }}>
+              Reduce espacios y muestra más contenido.
+            </small>
+
+            <input
+              type="checkbox"
+              checked={denseMode}
+              onChange={(e) => setDenseMode(e.target.checked)}
+              style={{
+                width: "42px",
+                height: "22px",
+                accentColor: "var(--renace-primary)",
+              }}
+            />
+          </div>
+        </div>
       </div>
 
-      <div className="card glass">
-        <h3>Datos</h3>
-        <p className="muted">
-          Toda tu información se guarda solo en este dispositivo usando
-          localStorage. Puedes limpiar manualmente desde la configuración de tu
-          navegador.
+      {/* TARJETA: Datos */}
+      <div className="card" style={{ marginTop: "20px" }}>
+        <div className="card-header">
+          <span className="card-title">Datos</span>
+        </div>
+
+        <p className="reflection-text" style={{ marginTop: "6px" }}>
+          Toda tu información se almacena localmente en este dispositivo usando
+          <strong> localStorage</strong>.
+        </p>
+
+        <p
+          style={{
+            marginTop: "6px",
+            fontSize: "0.8rem",
+            color: "var(--renace-text-muted)",
+          }}
+        >
+          Puedes limpiar los datos desde la configuración de tu navegador.
         </p>
       </div>
-    </section>
+    </div>
   );
 }

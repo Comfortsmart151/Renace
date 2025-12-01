@@ -40,16 +40,13 @@ const MESSAGES = {
 };
 
 export function TaskSuccessModal({ task, onClose }) {
-  if (!task) return null;
+  if (!task) return <></>;
 
   const messages = MESSAGES[task.emotion] || MESSAGES.default;
   const message = messages[Math.floor(Math.random() * messages.length)];
 
   useEffect(() => {
     if (navigator.vibrate) navigator.vibrate(15);
-  }, []);
-
-  useEffect(() => {
     playSound("task-complete", 0.35);
   }, []);
 
@@ -59,39 +56,65 @@ export function TaskSuccessModal({ task, onClose }) {
   };
 
   return (
-    <div className="task-success-overlay" onClick={handleClose}>
-      <div
-        className="task-success-modal glass"
-        onClick={(e) => e.stopPropagation()}
-      >
-        <div className="ts-icon">{getIcon(task.emotion)}</div>
+    <>
+      {/* Fondo oscuro + blur */}
+      <div className="modal-backdrop" onClick={handleClose}>
+        
+        {/* Panel premium */}
+        <div
+          className="modal-panel"
+          onClick={(e) => e.stopPropagation()}
+        >
+          
+          {/* Emoji */}
+          <div style={{
+            fontSize: "2.4rem",
+            marginBottom: "6px",
+            textAlign: "center"
+          }}>
+            {getIcon(task.emotion)}
+          </div>
 
-        <h3 className="ts-title">¡Tarea completada!</h3>
-        <p className="ts-message">{message}</p>
+          {/* Título */}
+          <h3 className="modal-title" style={{ textAlign: "center" }}>
+            ¡Tarea completada!
+          </h3>
 
-        <button className="ts-button" onClick={handleClose}>
-          Continuar
-        </button>
+          {/* Mensaje */}
+          <p
+            className="modal-subtitle"
+            style={{
+              marginTop: "4px",
+              marginBottom: "10px",
+              textAlign: "center",
+              fontSize: "0.9rem",
+              lineHeight: "1.4",
+            }}
+          >
+            {message}
+          </p>
+
+          {/* Botón principal */}
+          <div className="modal-footer" style={{ justifyContent: "center" }}>
+            <button className="btn btn-primary" onClick={handleClose}>
+              Continuar
+            </button>
+          </div>
+
+        </div>
       </div>
-    </div>
+    </>
   );
 }
 
 function getIcon(emotion) {
   switch (emotion) {
-    case "calm":
-      return "🌙";
-    case "focused":
-      return "🎯";
-    case "grateful":
-      return "💛";
-    case "excited":
-      return "✨";
-    case "anxious":
-      return "🛡";
-    case "tired":
-      return "😴";
-    default:
-      return "🌟";
+    case "calm": return "🌙";
+    case "focused": return "🎯";
+    case "grateful": return "💛";
+    case "excited": return "✨";
+    case "anxious": return "🛡";
+    case "tired": return "😴";
+    default: return "🌟";
   }
 }

@@ -1,0 +1,527 @@
+/* ==========================================================
+   RENACE — TARJETAS PREMIUM
+   Glass suave, animaciones, chips y contenido
+   ========================================================== */
+
+/* ---------------------------------------
+   1. CARD GENERAL (glass premium)
+---------------------------------------- */
+.card,
+.home-card,
+.glass-card {
+  border-radius: var(--radius-xl);
+  padding: 16px 16px 14px;
+
+  background:
+    radial-gradient(circle at 0% 0%, rgba(168, 85, 247, 0.18), transparent 65%),
+    radial-gradient(circle at 100% 100%, rgba(56, 189, 248, 0.20), transparent 65%),
+    var(--glass-bg);
+
+  border: 1px solid var(--glass-border);
+
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+
+  box-shadow: var(--shadow-soft);
+
+  transition:
+    transform var(--transition-med),
+    box-shadow var(--transition-med),
+    background var(--transition-med),
+    opacity var(--transition-med);
+}
+
+/* Hover premium (solo desktop) */
+@media (hover: hover) {
+  .card:hover,
+  .home-card:hover,
+  .glass-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-hover);
+  }
+}
+
+/* Animación de entrada suave */
+.card,
+.home-card {
+  opacity: 0;
+  animation: card-fade-in 0.45s ease forwards;
+}
+
+@keyframes card-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ---------------------------------------
+   2. CARD HEADER
+---------------------------------------- */
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.card-title {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--renace-text-soft);
+}
+
+.card-tag {
+  font-size: 0.66rem;
+  padding: 4px 10px;
+  border-radius: var(--radius-pill);
+
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(6px);
+  border: 1px solid rgba(148, 163, 184, 0.35);
+
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--renace-text-soft);
+}
+
+/* ---------------------------------------
+   3. TEXTO (reflexiones / descripciones)
+---------------------------------------- */
+.reflection-text,
+.card-description,
+.card-reflection {
+  font-size: 0.88rem;
+  color: var(--renace-text-main);
+  line-height: 1.45;
+  margin-top: 4px;
+}
+
+/* ---------------------------------------
+   4. CHIPS PREMIUM (para emociones)
+---------------------------------------- */
+.chips-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 12px;
+}
+
+.chip,
+.clean-chip {
+  padding: 5px 12px;
+  font-size: 0.74rem;
+
+  border-radius: var(--radius-pill);
+
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(148, 163, 184, 0.35);
+
+  color: var(--renace-text-soft);
+
+  cursor: pointer;
+
+  transition:
+    background var(--transition-med),
+    transform var(--transition-med),
+    box-shadow var(--transition-med),
+    border-color var(--transition-med);
+}
+
+/* CHIP ACTIVO */
+.chip.active,
+.clean-chip.is-selected {
+  background: var(--renace-gradient);
+  color: #020617;
+
+  border-color: transparent;
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-chip);
+}
+
+/* Pulsación táctil */
+.chip:active,
+.clean-chip:active {
+  transform: scale(0.94);
+  opacity: 0.85;
+}
+
+/* ============================
+   BOTÓN PRINCIPAL (Home, etc.)
+   ============================ */
+
+.primary-button {
+  display: inline-block;
+  margin-top: 10px;
+
+  padding: 10px 18px;
+  border-radius: var(--radius-pill);
+  border: none;
+
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+
+  cursor: pointer;
+
+  background: linear-gradient(135deg, #60a5fa, #818cf8);
+  color: #0f172a;
+
+  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.8);
+
+  transition:
+    transform var(--transition-fast),
+    box-shadow var(--transition-fast),
+    opacity var(--transition-fast);
+}
+
+.primary-button:hover {
+  box-shadow: 0 16px 36px rgba(129, 140, 248, 0.55);
+}
+
+.primary-button:active {
+  transform: translateY(1px) scale(0.97);
+  opacity: 0.92;
+}
+
+/* ============================================================
+   RENACE PREMIUM — Mejoras visuales para tarjetas
+   (Inner glow, títulos mejorados, animaciones y textos)
+   ============================================================ */
+
+/* 1. Card con inner glow + mejor fondo */
+.card {
+  border-radius: var(--radius-xl);
+  padding: 14px 14px 12px;
+
+  background: linear-gradient(
+      135deg,
+      rgba(129, 140, 248, 0.08),
+      rgba(56, 189, 248, 0.08)
+    ),
+    var(--glass-bg);
+
+  backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid rgba(148, 163, 184, 0.35);
+
+  /* Sombra exterior + inner glow */
+  box-shadow:
+    0 18px 45px rgba(15, 23, 42, 0.55),
+    inset 0 0 18px rgba(255, 255, 255, 0.03);
+
+  /* ANIMACIÓN */
+  opacity: 0;
+  transform: translateY(8px);
+  animation: cardFade 0.45s ease-out forwards;
+}
+
+/* 2. Títulos mejorados */
+.card-title {
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: #f1f5f9;
+  letter-spacing: 0.02em;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.45);
+}
+
+/* 3. Texto más legible */
+.card p {
+  margin-top: 6px;
+  line-height: 1.45;
+  color: var(--renace-text-soft);
+  font-size: 0.84rem;
+}
+
+/* 4. Animación suave de entrada */
+@keyframes cardFade {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ============================================================
+   RENACE PREMIUM — Botones dentro de tarjetas
+   ============================================================ */
+
+/* Botón base */
+.card .btn,
+.primary-button,
+.card button {
+  padding: 8px 16px;
+  border-radius: var(--radius-pill);
+  border: none;
+  cursor: pointer;
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  transition: 
+    background var(--transition-med),
+    transform var(--transition-fast),
+    box-shadow var(--transition-med);
+}
+
+/* Botón principal tipo “Crear intención ahora” */
+.primary-button,
+.card .primary-button {
+  background: linear-gradient(
+    135deg,
+    rgba(129, 140, 248, 0.85),
+    rgba(56, 189, 248, 0.88)
+  );
+  color: #0f172a;
+  box-shadow: 
+    0 10px 22px rgba(56, 189, 248, 0.35),
+    0 0 12px rgba(129, 140, 248, 0.55);
+}
+
+.primary-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 
+    0 14px 28px rgba(56, 189, 248, 0.45),
+    0 0 16px rgba(168, 85, 247, 0.6);
+}
+
+.primary-button:active {
+  transform: translateY(1px);
+  box-shadow: 
+    0 6px 14px rgba(56, 189, 248, 0.25);
+}
+
+/* Botón fantasma (usado en algunas tarjetas o estados secundarios) */
+.btn-ghost,
+.card .btn-ghost {
+  background: rgba(15, 23, 42, 0.55);
+  color: var(--renace-text-soft);
+  border: 1px solid rgba(148, 163, 184, 0.45);
+  backdrop-filter: blur(12px);
+}
+
+.btn-ghost:hover {
+  border-color: rgba(168, 85, 247, 0.75);
+  box-shadow: 0 0 12px rgba(129, 140, 248, 0.35);
+}
+
+/* Botón de texto minimalista */
+.btn-text {
+  background: transparent;
+  color: var(--renace-primary);
+  font-weight: 600;
+  padding: 4px 6px;
+  font-size: 0.78rem;
+}
+
+.btn-text:hover {
+  opacity: 0.8;
+}
+
+/* ============================================================
+   RENACE PREMIUM — TARJETAS ESPECIALES DEL HOME
+   ============================================================ */
+
+/* ------------------------------------------------------------
+   1. TÓMATE 30 SEGUNDOS — tarjeta estilo “mindfulness”
+   ------------------------------------------------------------ */
+.card-mindful {
+  background: linear-gradient(
+      135deg,
+      rgba(129, 140, 248, 0.15),
+      rgba(56, 189, 248, 0.10)
+    ),
+    var(--glass-bg);
+  border: 1px solid rgba(168, 85, 247, 0.4);
+  box-shadow: 0 12px 32px rgba(56, 189, 248, 0.12);
+}
+
+.card-mindful .card-title {
+  font-size: 1rem;
+  color: #e0e7ff;
+}
+
+.card-mindful p {
+  color: var(--renace-text-soft);
+  line-height: 1.45;
+}
+
+/* Botón dentro de esta tarjeta */
+.card-mindful .primary-button {
+  margin-top: 8px;
+}
+
+
+/* ------------------------------------------------------------
+   2. TAREAS PENDIENTES — tarjeta estilo “organización”
+   ------------------------------------------------------------ */
+.card-tasks {
+  background: linear-gradient(
+      135deg,
+      rgba(56, 189, 248, 0.08),
+      rgba(129, 140, 248, 0.05)
+    ),
+    var(--glass-bg);
+  border: 1px solid rgba(148, 163, 184, 0.32);
+  box-shadow: 0 10px 28px rgba(15, 23, 42, 0.45);
+}
+
+.card-tasks .card-title {
+  font-size: 0.92rem;
+  color: #dbeafe;
+}
+
+.card-tasks p {
+  font-size: 0.82rem;
+  color: var(--renace-text-soft);
+}
+
+/* Hover ligero */
+.card-tasks:hover {
+  transform: translateY(-2px);
+  transition: var(--transition-med);
+  box-shadow: 0 14px 34px rgba(56, 189, 248, 0.18);
+}
+
+
+/* ------------------------------------------------------------
+   3. INTENCIONES DE HOY — tarjeta estilo “emocional”
+   ------------------------------------------------------------ */
+.card-intentions {
+  background: linear-gradient(
+      135deg,
+      rgba(168, 85, 247, 0.12),
+      rgba(56, 189, 248, 0.18)
+    ),
+    var(--glass-bg);
+  border: 1px solid rgba(129, 140, 248, 0.45);
+  box-shadow: 0 12px 28px rgba(129, 140, 248, 0.25);
+}
+
+.card-intentions .card-title {
+  font-size: 0.92rem;
+  color: #ede9fe;
+}
+
+.card-intentions p {
+  font-size: 0.82rem;
+  color: var(--renace-text-soft);
+}
+
+/* Hover suave */
+.card-intentions:hover {
+  transform: translateY(-2px);
+  transition: var(--transition-med);
+  box-shadow: 0 16px 38px rgba(168, 85, 247, 0.25);
+}
+
+/* ============================================================
+   RENACE PREMIUM — Animación automática escalonada (STAGGER)
+   Para todas las tarjetas .card dentro del Home
+   ============================================================ */
+
+/* Animación base */
+@keyframes renaceFadeUp {
+  0% {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  60% {
+    opacity: 0.9;
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Animación aplicada automáticamente */
+.home-grid .card {
+  opacity: 0;
+  animation: renaceFadeUp 0.7s ease forwards;
+}
+
+/* STAGGER — cada tarjeta entra con un pequeño delay automático */
+.home-grid .card:nth-child(1) { animation-delay: 0.05s; }
+.home-grid .card:nth-child(2) { animation-delay: 0.12s; }
+.home-grid .card:nth-child(3) { animation-delay: 0.22s; }
+.home-grid .card:nth-child(4) { animation-delay: 0.32s; }
+.home-grid .card:nth-child(5) { animation-delay: 0.42s; }
+.home-grid .card:nth-child(6) { animation-delay: 0.52s; }
+
+/* ============================================================
+   RENACE PREMIUM — Animación global de tarjetas
+   Fade + Slide Up + Stagger universal
+   ============================================================ */
+
+/* Animación base para TODAS las tarjetas */
+@keyframes renaceFadeUpGlobal {
+  0% {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  60% {
+    opacity: 0.9;
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.card {
+  opacity: 0;
+  animation: renaceFadeUpGlobal 0.7s ease forwards;
+}
+
+/* ============================================================
+   STAGGER AUTOMÁTICO
+   Aplica a cualquier lista de tarjetas bien estructurada
+   ============================================================ */
+
+.home-grid .card:nth-child(1),
+.tasks-grid .card:nth-child(1),
+.section-grid .card:nth-child(1),
+.achievements-grid .card:nth-child(1),
+.profile-section .card:nth-child(1)   { animation-delay: 0.05s; }
+
+.home-grid .card:nth-child(2),
+.tasks-grid .card:nth-child(2),
+.section-grid .card:nth-child(2),
+.achievements-grid .card:nth-child(2),
+.profile-section .card:nth-child(2)   { animation-delay: 0.12s; }
+
+.home-grid .card:nth-child(3),
+.tasks-grid .card:nth-child(3),
+.section-grid .card:nth-child(3),
+.achievements-grid .card:nth-child(3),
+.profile-section .card:nth-child(3)   { animation-delay: 0.22s; }
+
+.home-grid .card:nth-child(4),
+.tasks-grid .card:nth-child(4),
+.section-grid .card:nth-child(4),
+.achievements-grid .card:nth-child(4),
+.profile-section .card:nth-child(4)   { animation-delay: 0.32s; }
+
+.home-grid .card:nth-child(5),
+.tasks-grid .card:nth-child(5),
+.section-grid .card:nth-child(5),
+.achievements-grid .card:nth-child(5),
+.profile-section .card:nth-child(5)   { animation-delay: 0.42s; }
+
+.home-grid .card:nth-child(6),
+.tasks-grid .card:nth-child(6),
+.section-grid .card:nth-child(6),
+.achievements-grid .card:nth-child(6),
+.profile-section .card:nth-child(6)   { animation-delay: 0.52s; }
+
+.home-card {
+  padding: 16px 20px;
+  margin-top: 18px;
+  border-radius: 20px;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(var(--glass-blur));
+}

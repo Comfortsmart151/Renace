@@ -1,0 +1,48 @@
+/* ==========================================================
+   RENACE — CSS ROOT INDEX (ubicado en /src/index.css)
+   Importa TODO el CSS global del proyecto en orden premium
+   ========================================================== */
+
+/* ==========
+   1. TOKENS
+   Variables globales, colores, espaciados, sombras, etc.
+   ========== */
+@import "./styles/tokens.css";
+
+/* ==========
+   2. BASE
+   Reset, tipografías, body, elementos nativos
+   ========== */
+@import "./styles/base.css";
+
+/* ==========
+   3. LAYOUT
+   Grid, contenedores, espaciado general, PageShell
+   ========== */
+@import "./styles/layout.css";
+
+/* ==========
+   4. COMPONENTES
+   Módulos UI específicos
+   ========== */
+
+/* Banner motivacional */
+@import "./styles/components/banner.css";
+
+/* Tarjetas premium */
+@import "./styles/components/cards.css";
+
+/* Formularios e inputs */
+@import "./styles/components/forms.css";
+
+/* Modales globales */
+@import "./styles/components/modals.css";
+
+/* Navegación inferior premium */
+@import "./styles/components/nav.css";
+
+/* ==========
+   5. UTILIDADES (Opcional)
+   Clases rápidas: margin, padding, display, etc.
+   ========== */
+/* (Vacío por ahora, lo añadimos cuando lo necesites) */

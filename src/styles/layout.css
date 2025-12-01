@@ -1,0 +1,160 @@
+/* ==========================================================
+   RENACE — LAYOUT GLOBAL
+   Estructura base para todas las pantallas
+   ========================================================== */
+
+/* ------------------------------
+   1. Contenedor principal (App)
+--------------------------------*/
+.app-shell {
+  min-height: 100vh;
+  max-width: 480px;
+  margin: 0 auto;
+
+  display: flex;
+  flex-direction: column;
+
+  /* Respeta áreas seguras del móvil */
+  padding: var(--safe-padding-y) var(--safe-padding-x);
+
+  /* Para que nada se esconda detrás del BottomNav */
+  padding-bottom: calc(var(--bottom-nav-height) + 24px);
+}
+
+/* ------------------------------
+   2. PageShell (envoltura de cada pantalla)
+--------------------------------*/
+.page-shell {
+  position: relative;
+  min-height: 100vh;
+  width: 100%;
+  max-width: 480px;
+  margin: 0 auto;
+
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  padding: var(--safe-padding-y) var(--safe-padding-x);
+  padding-bottom: calc(var(--bottom-nav-height) + 24px);
+}
+
+/* ------------------------------
+   3. Page Header Premium
+--------------------------------*/
+.page-header {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+
+  padding: 14px 16px;
+
+  border-radius: var(--radius-xl);
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+
+  box-shadow: var(--shadow-soft);
+  overflow: hidden;
+}
+
+.page-header-text h1 {
+  margin: 0;
+  font-size: 1.15rem;
+  font-weight: 600;
+}
+
+.page-header-text p {
+  margin: 4px 0 0;
+  font-size: 0.82rem;
+  color: var(--renace-text-muted);
+}
+
+/* ------------------------------
+   4. Header Orb (decoración premium)
+--------------------------------*/
+.page-header-orb {
+  width: 80px;
+  height: 80px;
+  border-radius: 999px;
+
+  background: radial-gradient(
+    circle at 30% 0%,
+    rgba(255, 255, 255, 0.9),
+    rgba(129, 140, 248, 0.25),
+    transparent 70%
+  );
+
+  opacity: 0.75;
+  filter: blur(6px);
+  pointer-events: none;
+}
+
+/* ------------------------------
+   5. Scroll interno de contenido
+--------------------------------*/
+.page-shell-content {
+  flex: 1;
+  overflow-y: auto;
+  padding-bottom: 8px;
+
+  /* Evita scroll doble cuando hay modals */
+  overscroll-behavior: contain;
+}
+
+/* ------------------------------
+   6. Tarjetas Glass Global
+--------------------------------*/
+.glass {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-xl);
+
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+
+  box-shadow: var(--shadow-soft);
+}
+
+/* ------------------------------
+   7. Home Grid
+--------------------------------*/
+.home-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+/* ------------------------------
+   8. Títulos de secciones
+--------------------------------*/
+.section-title {
+  font-size: 0.92rem;
+  font-weight: 500;
+  color: var(--renace-text-soft);
+  margin: 0 0 6px;
+}
+
+/* ============================
+   HOME LAYOUT
+   ============================ */
+
+.home-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 0;              /* controlamos el espacio con margin-bottom */
+  padding-bottom: 8px;
+}
+
+/* Espacio entre cada bloque dentro de Home */
+.home-wrapper > * {
+  margin-bottom: 14px;
+}
+
+/* El último no deja hueco extra abajo */
+.home-wrapper > *:last-child {
+  margin-bottom: 0;
+}

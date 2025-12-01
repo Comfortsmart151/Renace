@@ -1,57 +1,77 @@
-import React, { useState } from "react";
+// src/pages/Profile.jsx
+import React, { useState, useEffect } from "react";
 
-export function Profile() {
-  const [name, setName] = useState(
-    localStorage.getItem("renace_profile_name") || ""
-  );
-  const [focusWord, setFocusWord] = useState(
-    localStorage.getItem("renace_profile_focus") || ""
-  );
+export default function Profile() {
+  const [name, setName] = useState("");
+  const [editing, setEditing] = useState(false);
+  const [tempName, setTempName] = useState("");
 
-  const handleSave = () => {
-    localStorage.setItem("renace_profile_name", name);
-    localStorage.setItem("renace_profile_focus", focusWord);
+  useEffect(() => {
+    const saved = localStorage.getItem("renace-user-name");
+    if (saved) setName(saved);
+  }, []);
+
+  const saveName = () => {
+    if (tempName.trim().length < 2) return;
+    localStorage.setItem("renace-user-name", tempName);
+    setName(tempName);
+    setEditing(false);
   };
 
   return (
-    <section className="profile-page">
-      <div className="card glass profile-header">
-        <div className="avatar-orb" aria-hidden="true" />
-        <div>
-          <p className="muted small">Bienvenido/a</p>
-          <h2>{name || "Tu nombre aquí"}</h2>
-          <p className="muted">
-            Diseña tu espacio emocional para que la app se sienta más tuya.
-          </p>
+    <div className="profile-section">
+
+      <div className="card animate-card">
+        <h2 className="profile-title">Mi Perfil</h2>
+
+        <div className="profile-avatar">
+          <span className="avatar-emoji">🙂</span>
         </div>
-      </div>
 
-      <div className="card glass">
-        <h3>Identidad consciente</h3>
-        <label className="field">
-          <span>Nombre o alias</span>
-          <input
-            type="text"
-            placeholder="Ej. Alex, Alma, Renacer..."
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-          />
-        </label>
+        <h3 className="profile-name">{name || "Tu nombre"}</h3>
 
-        <label className="field">
-          <span>Palabra enfoque del momento</span>
-          <input
-            type="text"
-            placeholder="Ej. Calma, Disciplina, Presencia..."
-            value={focusWord}
-            onChange={(e) => setFocusWord(e.target.value)}
-          />
-        </label>
-
-        <button className="primary-button" onClick={handleSave}>
-          Guardar cambios
+        <button
+          className="primary-button"
+          onClick={() => {
+            setTempName(name);
+            setEditing(true);
+          }}
+        >
+          Cambiar nombre
         </button>
       </div>
-    </section>
+
+      {editing && (
+        <div className="modal-overlay" onClick={() => setEditing(false)}>
+          <div
+            className="modal-card glass"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <h3 className="modal-title">Editar nombre</h3>
+
+            <input
+              type="text"
+              className="modal-input"
+              placeholder="Escribe tu nombre"
+              value={tempName}
+              onChange={(e) => setTempName(e.target.value)}
+            />
+
+            <div className="modal-actions">
+              <button
+                className="modal-btn cancel"
+                onClick={() => setEditing(false)}
+              >
+                Cancelar
+              </button>
+
+              <button className="modal-btn save" onClick={saveName}>
+                Guardar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
   );
 }

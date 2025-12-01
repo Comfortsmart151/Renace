@@ -1,3 +1,4 @@
+// src/components/PageShell.jsx
 import React from "react";
 
 export function PageShell({
@@ -7,13 +8,10 @@ export function PageShell({
   onChangeTab,
   children,
 }) {
-  
   const hideHeader = currentTab === "home" || currentTab === "create";
 
   return (
     <div className="page-shell" data-tab={currentTab}>
-
-      {/* 🔥 Ocultar header en HOME y CREATE */}
       {!hideHeader && (
         <header className="page-header glass">
           <div className="page-header-text">
@@ -24,7 +22,7 @@ export function PageShell({
         </header>
       )}
 
-      {/* 🔥 CONTENIDO */}
+      {/* 👉 Aquí el cambio importante */}
       <div className="page-content">
         {children}
       </div>

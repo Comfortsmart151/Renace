@@ -1,0 +1,113 @@
+/* ==========================================================
+   RENACE — DESIGN TOKENS (Variables globales)
+   Base de colores, espacios, sombras, tipografía y efectos
+   ========================================================== */
+
+:root {
+  /* --------------------------------------------------------
+     1. PALETA PRINCIPAL RENACE
+  -------------------------------------------------------- */
+  --renace-bg: #050616;
+  --renace-bg-alt: #090b23;
+
+  --renace-primary: #8b5cf6;
+  --renace-primary-soft: #a855f7;
+  --renace-primary-strong: #7c3aed;
+
+  --renace-secondary: #38bdf8;
+  --renace-secondary-soft: #22c1c3;
+
+  /* Gradiente oficial Renace */
+  --renace-gradient: linear-gradient(
+    135deg,
+    var(--renace-primary) 0%,
+    var(--renace-secondary) 100%
+  );
+
+  /* --------------------------------------------------------
+     2. TEXTO
+  -------------------------------------------------------- */
+  --renace-text-main: #f9fafb;
+  --renace-text-soft: #e5e7eb;
+  --renace-text-muted: #9ca3af;
+
+  /* --------------------------------------------------------
+     3. ESTADOS
+  -------------------------------------------------------- */
+  --renace-success: #22c55e;
+  --renace-warning: #f97316;
+  --renace-danger: #ef4444;
+
+  /* --------------------------------------------------------
+     4. COLORES EMOCIONALES (para chips / tareas / intención)
+     Coinciden EXACTO con tus EMOTIONS en Create.jsx
+  -------------------------------------------------------- */
+  --emotion-calm: #77c3ff;
+  --emotion-focused: #6a8dff;
+  --emotion-grateful: #ffd88f;
+  --emotion-excited: #ff7aea;
+  --emotion-anxious: #8ca3b8;
+  --emotion-tired: #c8a7ff;
+
+  /* --------------------------------------------------------
+     5. GLASS EFFECT
+  -------------------------------------------------------- */
+  --glass-bg: rgba(15, 23, 42, 0.75);
+  --glass-border: rgba(148, 163, 184, 0.28);
+  --glass-blur: 18px;
+
+  /* Glass más suave (por si lo usas luego) */
+  --glass-bg-soft: rgba(15, 23, 42, 0.6);
+  --glass-border-soft: rgba(148, 163, 184, 0.15);
+
+  /* --------------------------------------------------------
+     6. SOMBRAS PREMIUM
+  -------------------------------------------------------- */
+  --shadow-soft: 0 18px 45px rgba(15, 23, 42, 0.65);
+  --shadow-chip: 0 8px 22px rgba(59, 130, 246, 0.45);
+  --shadow-card: 0 22px 55px rgba(0, 0, 0, 0.55);
+
+  /* Hover más ligero */
+  --shadow-hover: 0 6px 22px rgba(129, 140, 248, 0.35);
+
+  /* --------------------------------------------------------
+     7. RADIOS
+  -------------------------------------------------------- */
+  --radius-lg: 18px;
+  --radius-xl: 22px;
+  --radius-xxl: 28px;
+  --radius-pill: 999px;
+
+  /* --------------------------------------------------------
+     8. LAYOUT & SPACING
+  -------------------------------------------------------- */
+  --safe-padding-x: 16px;
+  --safe-padding-y: 14px;
+
+  --bottom-nav-height: 72px;
+  --header-height: 64px;
+
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 14px;
+  --spacing-lg: 20px;
+  --spacing-xl: 28px;
+
+  /* --------------------------------------------------------
+     9. TIPOGRAFÍA
+  -------------------------------------------------------- */
+  --font-main: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
+    "Segoe UI", sans-serif;
+  --font-semibold: 600;
+  --font-bold: 700;
+
+  /* --------------------------------------------------------
+     10. TRANSICIONES Y ANIMACIONES
+  -------------------------------------------------------- */
+  --transition-fast: 150ms ease-out;
+  --transition-med: 220ms ease-out;
+  --transition-slow: 380ms cubic-bezier(0.22, 1, 0.36, 1);
+
+  /* Animación de glow */
+  --glow-primary: 0 0 12px rgba(139, 92, 246, 0.55);
+}

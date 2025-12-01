@@ -1,4 +1,6 @@
+// src/App.jsx
 import React, { useEffect, useState } from "react";
+
 import { PageShell } from "./components/PageShell.jsx";
 import { BottomNav } from "./components/BottomNav.jsx";
 
@@ -6,69 +8,55 @@ import { Home } from "./pages/Home.jsx";
 import { Tasks } from "./pages/Tasks.jsx";
 import { Create } from "./pages/Create.jsx";
 import { Achievements } from "./pages/Achievements.jsx";
-import { Profile } from "./pages/Profile.jsx";
+import Profile from "./pages/Profile.jsx";
 import { Settings } from "./pages/Settings.jsx";
 
+// ================================
+// CONSTANTES
+// ================================
 const INITIAL_TAB = "home";
+const KEY_TASKS = "renace_tasks_v1";
+const KEY_INTENTIONS = "renace_intentions_v1";
 
-/* ========================================================
-   LOAD / SAVE — Tasks
-======================================================== */
-const loadTasks = () => {
+// ================================
+// LOAD / SAVE HELPERS (ESTABLES)
+// ================================
+const safeLoad = (key, fallback = []) => {
   try {
-    const raw = localStorage.getItem("renace_tasks_v1");
-    return raw ? JSON.parse(raw) : [];
+    const raw = localStorage.getItem(key);
+    return raw ? JSON.parse(raw) : fallback;
   } catch {
-    return [];
+    return fallback;
   }
 };
 
-const saveTasks = (tasks) => {
+const safeSave = (key, value) => {
   try {
-    localStorage.setItem("renace_tasks_v1", JSON.stringify(tasks));
+    localStorage.setItem(key, JSON.stringify(value));
   } catch {}
 };
 
-/* ========================================================
-   LOAD / SAVE — Intentions
-======================================================== */
-const loadIntentions = () => {
-  try {
-    const raw = localStorage.getItem("renace_intentions_v1");
-    return raw ? JSON.parse(raw) : [];
-  } catch {
-    return [];
-  }
-};
-
-const saveIntentions = (intentions) => {
-  try {
-    localStorage.setItem(
-      "renace_intentions_v1",
-      JSON.stringify(intentions)
-    );
-  } catch {}
-};
-
+// ================================
+// COMPONENTE PRINCIPAL
+// ================================
 export default function App() {
-  const [currentTab, setCurrentTab] = useState(INITIAL_TAB);
-
-  const [tasks, setTasks] = useState(() => loadTasks());
-  const [intentions, setIntentions] = useState(() => loadIntentions());
-
-  const [editingTask, setEditingTask] = useState(null);
-
   const today = new Date().toISOString().slice(0, 10);
 
-  /* ========================================================
-     PERSISTENCIA
-  ======================================================== */
-  useEffect(() => saveTasks(tasks), [tasks]);
-  useEffect(() => saveIntentions(intentions), [intentions]);
+  // ESTADOS
+  const [currentTab, setCurrentTab] = useState(INITIAL_TAB);
+  const [tasks, setTasks] = useState(() => safeLoad(KEY_TASKS));
+  const [intentions, setIntentions] = useState(() => safeLoad(KEY_INTENTIONS));
+  const [editingTask, setEditingTask] = useState(null);
 
-  /* ========================================================
-     HANDLERS — Intenciones
-  ======================================================== */
+  // ================================
+  // Persistencia automática
+  // ================================
+  useEffect(() => safeSave(KEY_TASKS, tasks), [tasks]);
+  useEffect(() => safeSave(KEY_INTENTIONS, intentions), [intentions]);
+
+  // ================================
+  // HANDLERS — INTENCIONES
+  // ================================
   const addIntention = (intention) => {
     setIntentions((prev) => [
       {
@@ -93,9 +81,9 @@ export default function App() {
     });
   };
 
-  /* ========================================================
-     HANDLERS — Tasks
-  ======================================================== */
+  // ================================
+  // HANDLERS — TAREAS
+  // ================================
   const handleAddTask = (task) => {
     setTasks((prev) => [
       {
@@ -111,7 +99,9 @@ export default function App() {
 
   const handleToggleTask = (id) => {
     setTasks((prev) =>
-      prev.map((t) => (t.id === id ? { ...t, done: !t.done } : t))
+      prev.map((t) =>
+        t.id === id ? { ...t, done: !t.done } : t
+      )
     );
   };
 
@@ -136,44 +126,27 @@ export default function App() {
     setCurrentTab("tasks");
   };
 
-  /* ========================================================
-     UI: Page Title
-  ======================================================== */
-  let pageTitle = "";
-  let pageSubtitle = "";
+  // ================================
+  // Títulos Dinámicos Premium
+  // ================================
+  const pageTitles = {
+    home: ["Renace hoy", "Intención diaria y calma emocional"],
+    tasks: ["Tareas pendientes", "Prioriza tus compromisos"],
+    create: [
+      editingTask ? "Editar tarea" : "Crear tarea",
+      editingTask ? "Modifica y guarda tus cambios" : "",
+    ],
+    achievements: ["Logros", "Celebra tu avance, paso a paso"],
+    profile: ["Perfil", "Diseña tu versión que renace"],
+    settings: ["Ajustes", "Afina tu experiencia"],
+  };
 
-  switch (currentTab) {
-    case "home":
-      pageTitle = "Renace hoy";
-      pageSubtitle = "Intención diaria y calma emocional";
-      break;
-    case "tasks":
-      pageTitle = "Tareas pendientes";
-      pageSubtitle = "Prioriza tus compromisos";
-      break;
-    case "create":
-      pageTitle = editingTask ? "Editar tarea" : "Crear tarea";
-      pageSubtitle = editingTask ? "Modifica y guarda tus cambios" : "";
-      break;
-    case "achievements":
-      pageTitle = "Logros";
-      pageSubtitle = "Celebra tu avance, paso a paso";
-      break;
-    case "profile":
-      pageTitle = "Perfil";
-      pageSubtitle = "Diseña tu versión que renace";
-      break;
-    case "settings":
-      pageTitle = "Ajustes";
-      pageSubtitle = "Afina tu experiencia";
-      break;
-    default:
-      pageTitle = "Renace";
-  }
+  const [pageTitle, pageSubtitle] =
+    pageTitles[currentTab] || ["Renace", ""];
 
-  /* ========================================================
-     RENDER
-  ======================================================== */
+  // ================================
+  // RENDERIZADO PREMIUM
+  // ================================
   return (
     <div className="app-shell">
       <PageShell
@@ -181,7 +154,6 @@ export default function App() {
         subtitle={pageSubtitle}
         currentTab={currentTab}
         onChangeTab={setCurrentTab}
-        data-tab={currentTab}
       >
         {currentTab === "home" && (
           <Home
@@ -190,6 +162,7 @@ export default function App() {
             today={today}
             deleteIntention={deleteIntention}
             onQuickStart={() => setCurrentTab("create")}
+            addIntention={addIntention}  // AGREGADO PARA MODAL
           />
         )}
 

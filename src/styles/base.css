@@ -1,0 +1,96 @@
+/* ==========================================================
+   RENACE — BASE STYLES
+   Reset + Fondo + Scroll + Tipografía
+   ========================================================== */
+
+/* ------------------------------
+   1. Reset global
+--------------------------------*/
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* Evita reflow innecesario y mantiene la app estable */
+html {
+  height: 100%;
+  scroll-behavior: smooth;
+}
+
+/* Evita scroll doble, asegura altura total */
+body,
+#root {
+  min-height: 100%;
+  width: 100%;
+}
+
+/* ------------------------------
+   2. Body general
+--------------------------------*/
+body {
+  font-family: var(--font-main);
+  color: var(--renace-text-main);
+
+  /* Fondo premium Renace */
+  background:
+    radial-gradient(circle at 0% 0%, rgba(56, 189, 248, 0.12), transparent 55%),
+    radial-gradient(circle at 100% 0%, rgba(168, 85, 247, 0.22), transparent 55%),
+    radial-gradient(circle at 50% 100%, rgba(59, 130, 246, 0.24), transparent 55%),
+    linear-gradient(145deg, #020617, #020617 40%, #030712 80%);
+
+  background-attachment: fixed;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  overflow-x: hidden;
+}
+
+/* ------------------------------
+   3. Medios y elementos básicos
+--------------------------------*/
+img {
+  max-width: 100%;
+  display: block;
+  user-select: none;
+}
+
+button,
+input,
+textarea,
+select {
+  font-family: inherit;
+  border: none;
+  outline: none;
+  background: none;
+}
+
+/* ------------------------------
+   4. Scroll global
+--------------------------------*/
+body {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(148, 163, 184, 0.7) transparent;
+}
+
+body::-webkit-scrollbar {
+  width: 8px;
+}
+
+body::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+body::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.75);
+  border-radius: 999px;
+  border: 1px solid transparent;
+  background-clip: padding-box;
+}
+
+/* Scroll suave */
+* {
+  scroll-behavior: smooth;
+}

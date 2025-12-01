@@ -1,55 +1,58 @@
-import React, { useMemo } from "react";
-import MotivationalBanner from "../components/MotivationalBanner.jsx";
-import DailyReflection from "../components/DailyReflection.jsx";
+// src/pages/Home.jsx
+import React, { useState, useMemo } from "react";
+import MotivationalBanner from "../components/MotivationalBanner";
+import TasksPopup from "../components/TasksPopup";
+import IntentionsPopup from "../components/IntentionsPopup";
 
-const emotionLabels = {
-  calm: "Calma",
-  focused: "Enfoque",
-  grateful: "Gratitud",
-  excited: "Emoción",
-  anxious: "Ansiedad",
-  tired: "Cansancio",
-};
+const REFLECTIONS = [
+  "Cada avance, por pequeño que sea, es progreso.",
+  "Tu historia apenas está comenzando.",
+  "Tu enfoque determina tu energía.",
+  "Si escuchas el silencio, ahí vive tu verdad.",
+];
+
+function getGreeting() {
+  const h = new Date().getHours();
+  if (h >= 5 && h < 12) return "Buenos días";
+  if (h >= 12 && h < 18) return "Buenas tardes";
+  return "Buenas noches";
+}
 
 export function Home({
-  tasks,
+  tasks = [],
+  intentions = [],
   today,
-  intentions,
+  deleteIntention,
   onQuickStart,
-  onDeleteTodayIntention,
 }) {
-  // Saludo según momento del día
-  const greeting = useMemo(() => {
-    const now = new Date();
-    const hour = now.getHours();
+  const [openTasksPopup, setOpenTasksPopup] = useState(false);
+  const [openIntentionsPopup, setOpenIntentionsPopup] = useState(false);
 
-    if (hour >= 5 && hour < 12) return "Buenos días";
-    if (hour >= 12 && hour < 18) return "Buenas tardes";
-    return "Buenas noches";
-  }, []);
+  const greeting = getGreeting();
+  const reflection = useMemo(
+    () => REFLECTIONS[Math.floor(Math.random() * REFLECTIONS.length)],
+    []
+  );
 
-  // Intenciones del día actual
-  const intentionsToday = useMemo(() => {
-    if (!Array.isArray(intentions)) return [];
-    return intentions.filter((i) => i.date === today);
-  }, [intentions, today]);
+  const todaysTasks = tasks.filter((t) => t.date === today && !t.done);
+  const todaysIntentions = intentions.filter((i) => i.date === today);
 
   return (
     <div className="home-grid">
-      {/* Banner motivacional */}
+
+      {/* SALUDO */}
+      <p className="home-greeting animate-card">
+        {greeting}, Alex
+      </p>
+
+      {/* BANNER */}
       <MotivationalBanner />
 
-      {/* Reflexión del día */}
-      <DailyReflection />
-
-      {/* Card principal */}
-      <div className="glass card hero-card">
-        <span className="hero-kicker">{greeting}</span>
-
-        <h2>¿Cuál es mi intención para el día de hoy?</h2>
-
-        <p className="hero-sub">
-          Toma 30 segundos para conectar con lo que realmente importa.
+      {/* TARJETA — INTENCIÓN */}
+      <div className="card premium-card animate-card">
+        <p className="card-subtitle">Tómate 30 segundos</p>
+        <p className="card-description">
+          para declarar tu intención del día de hoy.
         </p>
 
         <button className="primary-button" onClick={onQuickStart}>
@@ -57,79 +60,58 @@ export function Home({
         </button>
       </div>
 
-      {/* Hoy — Tareas del día (igual que antes) */}
-      <div className="glass card today">
-        <h3>Hoy</h3>
+      {/* TARJETA — REFLEXIÓN */}
+      <div className="card premium-card small animate-card">
+        <p className="card-title">Reflexión del día</p>
+        <p className="card-reflection">“ {reflection} ”</p>
+      </div>
 
-        {tasks.length === 0 ? (
-          <p className="muted">
-            Aún no tienes tareas para hoy. Crea tu primera acción consciente y
-            dale dirección real a tu día.
-          </p>
+      {/* TARJETA — TAREAS */}
+      <div
+        className="card premium-card small clickable animate-card"
+        onClick={() => setOpenTasksPopup(true)}
+      >
+        <p className="card-title">Tareas pendientes</p>
+        {todaysTasks.length === 0 ? (
+          <p className="card-description">No tienes tareas para hoy.</p>
         ) : (
-          <ul className="mini-task-list">
-            {tasks.slice(0, 3).map((t) => (
-              <li key={t.id}>
-                <div className={`status-dot ${t.done ? "is-done" : ""}`} />
-
-                <div className="mini-task-text">
-                  <p>{t.title}</p>
-                  {t.reason && <small>{t.reason}</small>}
-                </div>
-              </li>
-            ))}
-          </ul>
+          <p className="mini-item">Ver {todaysTasks.length} tarea(s)</p>
         )}
       </div>
 
-      {/* Intenciones de hoy — Diario emocional */}
-      <div className="glass card last-intention">
-        <h3>Intenciones de hoy</h3>
-
-        {intentionsToday.length === 0 ? (
-          <p className="muted small">
-            Cuando crees una intención, aparecerá aquí como parte de tu diario
-            emocional de hoy.
+      {/* TARJETA — INTENCIONES */}
+      <div
+        className="card premium-card small clickable animate-card"
+        onClick={() => setOpenIntentionsPopup(true)}
+      >
+        <p className="card-title">Intenciones de hoy</p>
+        {todaysIntentions.length === 0 ? (
+          <p className="card-description">
+            Cuando crees una intención aparecerá aquí.
           </p>
         ) : (
-          intentionsToday.map((intent) => (
-            <div key={intent.id} className="last-intention-body">
-              <p className="last-intention-title">{intent.title}</p>
-
-              {intent.reason && (
-                <p className="last-intention-reason">{intent.reason}</p>
-              )}
-
-              <div className="chip-row">
-                {intent.emotion && (
-                  <span className="chip small">
-                    {emotionLabels[intent.emotion] || intent.emotion}
-                  </span>
-                )}
-
-                {intent.date && (
-                  <span className="chip secondary small">
-                    {new Date(intent.date).toLocaleDateString("es-ES", {
-                      day: "2-digit",
-                      month: "short",
-                    })}
-                  </span>
-                )}
-
-                {intent.date === today && onDeleteTodayIntention && (
-                  <button
-                    type="button"
-                    className="ghost-button small"
-                    onClick={() => onDeleteTodayIntention(intent.id)}
-                  >
-                    Borrar de hoy
-                  </button>
-                )}
-              </div>
-            </div>
-          ))
+          <p className="mini-item">
+            Ver {todaysIntentions.length} intención(es)
+          </p>
         )}
       </div>
+
+      {/* POPUP TAREAS */}
+      {openTasksPopup && (
+        <TasksPopup
+          tasks={todaysTasks}
+          onClose={() => setOpenTasksPopup(false)}
+        />
+      )}
+
+      {/* POPUP INTENCIONES */}
+      {openIntentionsPopup && (
+        <IntentionsPopup
+          intentions={todaysIntentions}
+          onDelete={deleteIntention}
+          onClose={() => setOpenIntentionsPopup(false)}
+        />
+      )}
     </div>
   );
 }

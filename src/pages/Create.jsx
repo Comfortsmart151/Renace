@@ -18,7 +18,9 @@ export function Create({
   editingTask,
   onUpdateTask,
 }) {
-  /* INTENCIÓN DEL DÍA */
+  /* ——————————————————————————————————
+     INTENCIÓN DEL DÍA
+  ——————————————————————————————————— */
   const [intentionTitle, setIntentionTitle] = useState("");
   const [intentionReason, setIntentionReason] = useState("");
   const [intentionEmotion, setIntentionEmotion] = useState("calm");
@@ -40,7 +42,9 @@ export function Create({
     setIntentionEmotion("calm");
   };
 
-  /* TAREA — MODO EDICIÓN */
+  /* ——————————————————————————————————
+     TAREA (EDICIÓN / NUEVA)
+  ——————————————————————————————————— */
   const isEditing = Boolean(editingTask);
 
   const [taskTitle, setTaskTitle] = useState(editingTask?.title || "");
@@ -103,7 +107,7 @@ export function Create({
       style={{
         background: selected ? color : "rgba(255,255,255,0.06)",
         borderColor: selected ? color : "rgba(255,255,255,0.15)",
-        color: selected ? "#000" : "var(--text-main)",
+        color: selected ? "#000" : "var(--renace-text-main)",
       }}
     >
       {label}
@@ -111,9 +115,10 @@ export function Create({
   );
 
   return (
-    <section className="create-page create-page-premium">
+    <div className="section-grid">
+
       {/* INTENCIÓN */}
-      <div className="glass card create-card create-card-intention">
+      <div className="card create-card animate-card">
         <h3>Intención del día</h3>
 
         <form className="create-form" onSubmit={handleIntentionSubmit}>
@@ -161,7 +166,7 @@ export function Create({
       </div>
 
       {/* TAREA */}
-      <div className="glass card create-card create-card-task">
+      <div className="card create-card animate-card">
         <h3>Tarea / acción consciente</h3>
 
         <form className="create-form" onSubmit={handleTaskSubmit}>
@@ -212,7 +217,7 @@ export function Create({
           </label>
 
           <label className="field">
-            <span>Fecha límite para completarla</span>
+            <span>Fecha límite</span>
             <input
               type="date"
               value={taskDeadline}
@@ -225,6 +230,6 @@ export function Create({
           </button>
         </form>
       </div>
-    </section>
+    </div>
   );
 }

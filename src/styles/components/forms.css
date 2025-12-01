@@ -1,0 +1,124 @@
+/* ==========================================================
+   RENACE — FORMULARIOS PREMIUM
+   Inputs, textareas, labels y estados
+   ========================================================== */
+
+/* ------------------------------
+   1. CONTENEDOR DE CAMPOS
+--------------------------------*/
+.field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 12px;
+}
+
+.field-label {
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--renace-text-soft);
+}
+
+.field-helper {
+  font-size: 0.7rem;
+  color: var(--renace-text-muted);
+}
+
+/* ------------------------------
+   2. INPUTS Y TEXTAREAS
+--------------------------------*/
+.input,
+.textarea,
+input[type="text"],
+input[type="date"],
+textarea {
+  width: 100%;
+  border-radius: var(--radius-lg);
+
+  padding: 10px 12px;
+  font-size: 0.86rem;
+
+  background: rgba(15, 23, 42, 0.75);
+  color: var(--renace-text-main);
+
+  border: 1px solid rgba(148, 163, 184, 0.35);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+
+  transition:
+    border-color var(--transition-fast),
+    box-shadow var(--transition-fast),
+    background var(--transition-fast),
+    transform var(--transition-fast);
+}
+
+/* Placeholder premium */
+.input::placeholder,
+.textarea::placeholder,
+textarea::placeholder {
+  color: rgba(209, 213, 219, 0.45);
+}
+
+/* ------------------------------
+   3. FOCUS (estilo iOS premium)
+--------------------------------*/
+.input:focus,
+.textarea:focus,
+input[type="text"]:focus,
+input[type="date"]:focus,
+textarea:focus {
+  border-color: var(--renace-primary-soft);
+  background: rgba(15, 23, 42, 0.9);
+
+  box-shadow: 0 0 0 2px rgba(129, 140, 248, 0.45);
+  transform: translateY(-1px);
+}
+
+/* ------------------------------
+   4. TEXTAREA
+--------------------------------*/
+.textarea,
+textarea {
+  min-height: 80px;
+  resize: vertical;
+}
+
+/* ------------------------------
+   5. SELECTS (si los usas luego)
+--------------------------------*/
+select {
+  width: 100%;
+  background: rgba(15, 23, 42, 0.75);
+  border: 1px solid rgba(148, 163, 184, 0.35);
+  border-radius: var(--radius-lg);
+  padding: 10px 12px;
+  color: var(--renace-text-main);
+  font-size: 0.86rem;
+
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+
+  transition:
+    border-color var(--transition-fast),
+    box-shadow var(--transition-fast),
+    background var(--transition-fast),
+    transform var(--transition-fast);
+}
+
+select:focus {
+  border-color: var(--renace-primary-soft);
+  box-shadow: 0 0 0 2px rgba(129, 140, 248, 0.45);
+  transform: translateY(-1px);
+}
+
+/* ------------------------------
+   6. ESTADO DESACTIVADO
+--------------------------------*/
+.input:disabled,
+.textarea:disabled,
+input:disabled,
+textarea:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background: rgba(15, 23, 42, 0.55);
+}

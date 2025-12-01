@@ -1,0 +1,133 @@
+/* ==========================================================
+   RENACE — Bottom Navigation Premium
+   Fijo, glass suave, animación y pulsación táctil
+   ========================================================== */
+
+/* ---------------------------------------
+   1. CONTENEDOR FIJO (EXTERNO)
+---------------------------------------- */
+.bottom-nav {
+  position: fixed;
+  left: 50%;
+  bottom: var(--safe-padding-y);
+  transform: translateX(-50%);
+
+  width: 100%;
+  max-width: 480px;
+  padding: 0 10px;
+
+  z-index: 50;
+
+  /* Truco: el contenedor NO recibe eventos */
+  pointer-events: none;
+}
+
+/* ---------------------------------------
+   2. CONTENEDOR INTERNO (GLASS)
+---------------------------------------- */
+.bottom-nav-inner {
+  pointer-events: auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 4px;
+
+  padding: 8px 12px;
+
+  border-radius: var(--radius-pill);
+
+  /* Glass premium */
+  background:
+    radial-gradient(circle at 0% 0%, rgba(56, 189, 248, 0.25), transparent 60%),
+    radial-gradient(circle at 100% 100%, rgba(168, 85, 247, 0.35), transparent 60%),
+    rgba(15, 23, 42, 0.88);
+
+  border: 1px solid var(--glass-border);
+
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+
+  box-shadow: var(--shadow-soft);
+}
+
+/* ---------------------------------------
+   3. ITEMS DEL NAV
+---------------------------------------- */
+.nav-item {
+  flex: 1;
+  border: none;
+  background: transparent;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  gap: 4px;
+  padding: 6px 0;
+
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+
+  /* Animaciones */
+  transition:
+    background var(--transition-med),
+    transform var(--transition-med),
+    opacity var(--transition-fast);
+}
+
+/* Icono */
+.nav-icon {
+  width: 22px;
+  height: 22px;
+  object-fit: contain;
+  opacity: 0.75;
+  transition: opacity var(--transition-fast);
+}
+
+/* Texto */
+.nav-label {
+  font-size: 0.7rem;
+  color: var(--renace-text-muted);
+  transition: color var(--transition-med);
+}
+
+/* ---------------------------------------
+   4. ESTADO ACTIVO
+---------------------------------------- */
+.nav-item.active {
+  background: linear-gradient(
+    135deg,
+    rgba(129, 140, 248, 0.8),
+    rgba(56, 189, 248, 0.85)
+  );
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 5px 18px rgba(129, 140, 248, 0.42);
+}
+
+.nav-item.active .nav-label {
+  color: #0f172a;
+  font-weight: 600;
+}
+
+.nav-item.active .nav-icon {
+  opacity: 1;
+}
+
+/* ---------------------------------------
+   5. HOVER (desktop only)
+---------------------------------------- */
+@media (hover: hover) {
+  .nav-item:hover:not(.active) {
+    background: rgba(255, 255, 255, 0.08);
+    transform: translateY(-1px);
+  }
+}
+
+/* ---------------------------------------
+   6. EFECTO TAP (Android/iOS)
+---------------------------------------- */
+.nav-item:active {
+  transform: scale(0.94);
+  opacity: 0.85;
+}

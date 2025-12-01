@@ -1,6 +1,16 @@
 import React, { useEffect, useState } from "react";
 
 const REFLECTIONS = [
+  "Respira, suelta y recuerda que estás haciendo lo mejor que puedes.",
+  "Hoy es una nueva oportunidad para elegir un pensamiento que te haga bien.",
+  "Pequeños pasos cuentan. Lo importante es seguir moviéndote.",
+  "Nada cambia si no cambias algo.",
+  "Tu intención guía tu camino.",
+  "Hoy puedes comenzar diferente.",
+  "Lo que haces hoy puede honrar a la persona que quieres ser mañana.",
+  "Tu bienestar importa más de lo que crees.",
+  "La calma es una práctica, no un destino.",
+  "Tu energía es tu responsabilidad.",
   "Tu intención de hoy puede cambiar la forma en que ves todo.",
   "A veces avanzar es simplemente respirar y volver a intentarlo.",
   "Mereces la calma que estás aprendiendo a darte.",
@@ -100,22 +110,24 @@ const REFLECTIONS = [
   "Hoy puedes ser más consciente, más ligero, más tú.",
   "Estás sembrando versiones de ti que aún no conoces.",
   "La intención correcta hace que todo fluya distinto.",
-  "Hoy es un buen día para renacer."
+  "Hoy es un buen día para renacer.",
 ];
 
 export default function DailyReflection() {
-  const [text, setText] = useState("");
+  const [reflection, setReflection] = useState("");
 
-  // Se ejecuta CADA VEZ que vuelves a Home (porque Home se desmonta y se monta de nuevo)
   useEffect(() => {
-    const index = Math.floor(Math.random() * REFLECTIONS.length);
-    setText(REFLECTIONS[index]);
+    const random = REFLECTIONS[Math.floor(Math.random() * REFLECTIONS.length)];
+    setReflection(random);
   }, []);
 
   return (
-    <article className="glass card reflection-card">
-      <p className="reflection-label">Reflexión del día</p>
-      <p className="reflection-text">“{text}”</p>
-    </article>
+    <div className="card">
+      <div className="card-header">
+        <span className="card-title">Reflexión del día</span>
+      </div>
+
+      <p className="reflection-text">{reflection}</p>
+    </div>
   );
 }

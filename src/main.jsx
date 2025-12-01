@@ -1,17 +1,18 @@
+// src/main.jsx
 import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App.jsx";
 
-// IMPORTA EL CSS CORRECTO
-import "./styles/global.css";
+// Importa SIEMPRE el CSS raíz
+import "./index.css";
 
-// REGISTRO DEL SERVICE WORKER (PWA)
+// PWA (Service Worker)
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", () => {
     navigator.serviceWorker
       .register("/service-worker.js")
-      .then(() => console.log("SW registrado ✔️"))
-      .catch((err) => console.log("SW error ❌", err));
+      .then(() => console.log("🔵 Service Worker registrado"))
+      .catch((err) => console.log("🔴 Error registrando SW:", err));
   });
 }
 
