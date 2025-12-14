@@ -1,6 +1,6 @@
 // src/pages/ActividadDias.jsx
 import React, { useEffect, useState } from "react";
-import "./Actividaddias.css";
+import "./ActividadDias.css";
 
 import { db } from "../firebase";
 import { collection, onSnapshot } from "firebase/firestore";
