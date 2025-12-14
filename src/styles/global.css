@@ -1,0 +1,218 @@
+/* =========================================================
+   RENACE — GLOBAL DARK THEME (ÚNICO)
+   ========================================================= */
+
+/* =======================
+   VARIABLES BASE
+======================= */
+:root {
+  --bg-main: #050816;
+  --bg-soft: #0b1020;
+  --bg-card: rgba(255, 255, 255, 0.04);
+
+  --text-main: #ffffff;
+  --text-soft: rgba(255, 255, 255, 0.7);
+  --text-muted: rgba(255, 255, 255, 0.45);
+
+  --border-soft: rgba(255, 255, 255, 0.08);
+
+  --accent-primary: #9b5cff;
+  --accent-glow: rgba(155, 92, 255, 0.45);
+
+  --radius-lg: 16px;
+  --radius-md: 12px;
+  --radius-sm: 8px;
+
+  --transition-fast: 0.2s ease;
+  --transition-medium: 0.35s ease;
+
+  --font-family: system-ui, -apple-system, BlinkMacSystemFont, "Inter", sans-serif;
+}
+
+/* =======================
+   RESET BÁSICO
+======================= */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
+}
+
+body {
+  font-family: var(--font-family);
+  background: radial-gradient(
+    circle at top,
+    #111827 0%,
+    #020617 55%,
+    #000000 100%
+  );
+  color: var(--text-main);
+  transition: background var(--transition-medium),
+              color var(--transition-medium);
+}
+
+/* =======================
+   CONTENEDOR APP
+======================= */
+.app-root {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  padding: 16px;
+}
+
+.app-shell {
+  width: 100%;
+  max-width: 480px;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.app-content {
+  flex: 1;
+  overflow-y: auto;
+  padding-bottom: 12px;
+}
+
+/* =======================
+   TARJETAS / SECCIONES
+======================= */
+.settings-section-premium,
+.settings-card-premium {
+  background: var(--bg-card);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-lg);
+}
+
+.settings-card-title {
+  color: var(--text-main);
+}
+
+.settings-subtitle-premium {
+  color: var(--text-soft);
+}
+
+/* =======================
+   BOTONES
+======================= */
+button {
+  font-family: inherit;
+}
+
+button.primary {
+  background: var(--accent-primary);
+  box-shadow: 0 0 14px var(--accent-glow);
+  color: white;
+}
+
+/* =======================
+   TOGGLES / ESTADOS
+======================= */
+.toggle.on {
+  box-shadow: 0 0 12px var(--accent-glow);
+}
+
+/* =========================================================
+   🔮 SISTEMA DE ACENTO GLOBAL — RENACE
+========================================================= */
+
+/* BOTONES PRINCIPALES */
+.button-primary,
+button.primary {
+  background: var(--accent-primary);
+  color: #fff;
+  border: none;
+  box-shadow: 0 0 14px var(--accent-glow);
+  transition: all 0.25s ease;
+}
+
+.button-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 0 18px var(--accent-glow);
+}
+
+/* TOGGLES ACTIVOS */
+.toggle.on,
+.settings-toggle.on {
+  background: var(--accent-primary);
+  box-shadow: 0 0 10px var(--accent-glow);
+}
+
+/* CHIPS ACTIVOS */
+.chip.active,
+.item-chip.active {
+  background: var(--accent-primary);
+  color: white;
+  box-shadow: 0 0 8px var(--accent-glow);
+}
+
+/* SEGMENTED CONTROL ACTIVO */
+.segment.active,
+.segmented-btn-ultra.active {
+  color: #fff;
+}
+
+/* BORDE ACTIVO */
+.card.active,
+.settings-card-premium.active {
+  border: 1px solid var(--accent-primary);
+  box-shadow: 0 0 20px var(--accent-glow);
+}
+
+/* ICONOS ACTIVOS */
+.icon.active {
+  color: var(--accent-primary);
+}
+
+/* LINKS IMPORTANTES */
+a.accent {
+  color: var(--accent-primary);
+}
+
+/* =========================================================
+   🔮 ACENTO GLOBAL — MAPEO A BOTONES EXISTENTES
+========================================================= */
+
+/* 🔹 BOTÓN PRINCIPAL (Home: Escribir intención) */
+.motivational-button,
+.intention-button,
+.primary-action {
+  background: var(--accent-primary) !important;
+  color: #fff !important;
+  border: none !important;
+  box-shadow: 0 0 16px var(--accent-glow) !important;
+}
+
+/* 🔹 BOTÓN FLOTANTE (+) — Tareas */
+.fab,
+.fab-button,
+.task-fab {
+  background: var(--accent-primary) !important;
+  color: #fff !important;
+  box-shadow: 0 0 18px var(--accent-glow) !important;
+}
+
+/* 🔹 BOTONES DE CREAR */
+.create-btn,
+.create-primary,
+.save-btn {
+  background: var(--accent-primary) !important;
+  color: #fff !important;
+  box-shadow: 0 0 14px var(--accent-glow) !important;
+}
+
+/* 🔹 HOVER / ACTIVE */
+.motivational-button:hover,
+.fab:hover,
+.create-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 0 22px var(--accent-glow);
+}

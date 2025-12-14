@@ -1,0 +1,444 @@
+/* ===========================================
+   ESTILOS GENERALES DE LA PÁGINA DE PERFIL
+=========================================== */
+.profile-page {
+  padding: 20px;
+  padding-bottom: 100px;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ===========================================
+   HEADER CARD — TARJETA SUPERIOR (OPCIÓN C)
+=========================================== */
+.split-header-card {
+  position: relative;
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 18px;
+  padding: 28px 20px 35px;
+  margin-bottom: 18px;
+  text-align: center;
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+}
+
+/* Icono de ajustes flotando */
+.settings-button-top {
+  position: absolute;
+  right: 14px;
+  top: 14px;
+  font-size: 20px;
+  background: rgba(255, 255, 255, 0.15);
+  border: none;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: white;
+  backdrop-filter: blur(8px);
+  transition: transform 0.15s ease, background 0.15s ease;
+}
+
+.settings-button-top:hover {
+  transform: scale(1.1);
+  background: rgba(255, 255, 255, 0.25);
+}
+
+/* ===========================================
+   AVATAR GRANDE (Clic para editar)
+=========================================== */
+.big-avatar {
+  width: 86px;
+  height: 86px;
+  border-radius: 50%;
+  margin: 0 auto;
+  margin-top: 5px;
+  margin-bottom: 12px;
+  background: rgba(255, 255, 255, 0.15);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 34px;
+  font-weight: 600;
+  color: white;
+  cursor: pointer;
+  backdrop-filter: blur(6px);
+  border: 2px solid rgba(255, 255, 255, 0.25);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.big-avatar:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 14px rgba(255, 255, 255, 0.35);
+}
+
+.profile-avatar-img.big-avatar {
+  object-fit: cover;
+}
+
+/* ===========================================
+   NOMBRE Y TAGLINE
+=========================================== */
+.profile-name {
+  font-size: 26px;
+  font-weight: 700;
+  color: white;
+  margin: 0;
+  cursor: pointer;
+  transition: opacity 0.15s ease;
+}
+
+.profile-name:hover {
+  opacity: 0.75;
+}
+
+.profile-tagline {
+  font-size: 14px;
+  margin-top: 4px;
+  color: rgba(255, 255, 255, 0.65);
+}
+
+/* ===========================================
+   TARJETA INFERIOR - NIVEL RENACE
+=========================================== */
+.profile-level-card {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 18px;
+  padding: 20px;
+  margin-bottom: 22px;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.level-title {
+  font-size: 18px;
+  color: white;
+  margin-bottom: 4px;
+  font-weight: 600;
+}
+
+.level-subtitle {
+  color: rgba(255, 255, 255, 0.75);
+  font-weight: 500;
+}
+
+.level-row {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 14px;
+}
+
+/* Badge de días activos */
+.level-badge {
+  background: rgba(255, 255, 255, 0.08);
+  padding: 10px 16px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  text-align: center;
+}
+
+.badge-label {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.65);
+}
+
+.badge-value {
+  font-size: 20px;
+  font-weight: 700;
+  color: #fff;
+  display: block;
+}
+
+/* Barra de experiencia */
+.profile-xp-bar {
+  width: 100%;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 20px;
+  margin-top: 14px;
+  overflow: hidden;
+}
+
+.profile-xp-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #a855f7, #7c3aed);
+  border-radius: 20px;
+  transition: width 0.3s ease;
+}
+
+.profile-xp-helper {
+  margin-top: 8px;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.profile-xp-strong {
+  font-weight: 700;
+  color: #c084fc;
+}
+
+/* ===========================================
+   SECCIONES DE PROGRESO Y ACCIONES PREMIUM
+=========================================== */
+.profile-section {
+  margin-top: 26px;
+}
+
+.profile-section-header h2 {
+  font-size: 18px;
+  font-weight: 700;
+  color: white;
+  margin-bottom: 2px;
+}
+
+.profile-section-header p {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.55);
+  margin-bottom: 15px;
+}
+
+/* === GRID DE PROGRESO === */
+.progress-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+}
+
+.progress-card {
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 16px;
+  padding: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(10px);
+  cursor: pointer;
+  text-align: left;
+  transition: transform 0.15s ease, background 0.2s ease;
+}
+
+.progress-card:hover {
+  transform: scale(1.03);
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.progress-icon {
+  font-size: 20px;
+}
+
+.progress-title {
+  font-size: 14px;
+  color: white;
+  margin-top: 6px;
+}
+
+.progress-desc {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.progress-number {
+  font-size: 20px;
+  font-weight: 700;
+  margin-top: 4px;
+  color: #c084fc;
+}
+
+/* ===========================================
+   ACCIONES PREMIUM
+=========================================== */
+.actions-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+  margin-top: 10px;
+}
+
+.action-card {
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 16px;
+  padding: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(10px);
+  cursor: pointer;
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.action-card:hover {
+  transform: scale(1.03);
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.action-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.action-icon {
+  font-size: 20px;
+}
+
+.action-title {
+  font-size: 14px;
+  color: white;
+  font-weight: 600;
+}
+
+.action-desc {
+  font-size: 12px;
+  margin-top: 4px;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.edit-inline-btn {
+  margin-top: 8px;
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+  padding: 8px 14px;
+  font-size: 13px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 10px;
+  cursor: pointer;
+  backdrop-filter: blur(6px);
+  transition: 0.2s ease;
+}
+
+.edit-inline-btn:hover {
+  background: rgba(255, 255, 255, 0.22);
+  transform: scale(1.03);
+}
+
+.profile-login-card {
+  background: rgba(255, 255, 255, 0.06);
+  padding: 20px;
+  border-radius: 18px;
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  margin-top: 16px;
+}
+
+.profile-login-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.profile-login-sub {
+  font-size: 0.9rem;
+  opacity: 0.8;
+  margin-bottom: 16px;
+}
+
+.profile-login-btn {
+  width: 100%;
+  padding: 12px;
+  border-radius: 12px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: white;
+  color: #222;
+  border: none;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.profile-login-btn:hover {
+  background: #e8e8e8;
+}
+
+.google-icon {
+  width: 20px;
+  height: 20px;
+}
+
+.profile-user-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.profile-user-avatar {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+}
+
+.profile-user-name {
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.profile-user-email {
+  font-size: 0.85rem;
+  opacity: 0.8;
+}
+
+.profile-logout-btn {
+  padding: 10px;
+  width: 100%;
+  border-radius: 12px;
+  background: rgba(255, 80, 80, 0.2);
+  color: #ff8080;
+  border: 1px solid rgba(255, 80, 80, 0.3);
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.profile-logout-btn:hover {
+  background: rgba(255, 80, 80, 0.35);
+}
+
+/* =====================================================
+   🎨 ACENTO GLOBAL — PROFILE
+===================================================== */
+
+.profile-name {
+  background: linear-gradient(
+    90deg,
+    var(--accent-primary),
+    color-mix(in srgb, var(--accent-primary) 70%, white)
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.profile-xp-bar-fill {
+  background: linear-gradient(
+    90deg,
+    var(--accent-primary),
+    color-mix(in srgb, var(--accent-primary) 70%, white)
+  );
+  box-shadow: 0 0 12px var(--accent-glow);
+}
+
+.progress-number {
+  color: var(--accent-primary);
+}
+
+.progress-card:hover,
+.action-card:hover {
+  box-shadow: 0 0 22px var(--accent-glow);
+}
+
+.settings-button-top:hover,
+.edit-inline-btn:hover {
+  background: color-mix(
+    in srgb,
+    var(--accent-primary) 22%,
+    rgba(255,255,255,0.18)
+  );
+}

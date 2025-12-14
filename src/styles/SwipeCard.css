@@ -1,0 +1,30 @@
+.swipe-card-wrapper {
+  position:relative;
+  margin:12px 0;
+}
+
+.swipe-card-actions {
+  position:absolute;
+  inset:0;
+}
+
+.swipe-card {
+  position:relative;
+  z-index:2;
+  padding:16px;
+  border-radius:18px;
+  background: rgba(255,255,255,0.17);
+  backdrop-filter: blur(18px);
+  border:1px solid rgba(255,255,255,0.17);
+  transition: transform 0.15s ease;
+}
+
+.swipe-card.returning {
+  transition: transform 0.25s cubic-bezier(0.22,1,0.36,1);
+}
+
+.swipe-card.archived {
+  background: rgba(120,90,185,0.22);
+  border:1px solid rgba(140,110,210,0.28);
+  opacity:0.75;
+}

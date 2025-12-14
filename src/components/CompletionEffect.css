@@ -1,0 +1,46 @@
+.completion-effect-container {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+}
+
+.particle {
+  position: absolute;
+  background: radial-gradient(circle, #c084fc, #818cf8);
+  border-radius: 50%;
+  opacity: 0;
+  animation: particle-burst 550ms ease-out forwards;
+}
+
+@keyframes particle-burst {
+  0% {
+    opacity: 1;
+    transform: translate(0, 0) scale(0.5);
+  }
+  80% {
+    opacity: 0.8;
+    transform: scale(1.1);
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+/* Glow de tarjeta completada */
+.card-completed-anim {
+  animation: completedGlow 600ms ease-out;
+}
+
+@keyframes completedGlow {
+  0% {
+    box-shadow: 0 0 0px rgba(192, 132, 252, 0);
+  }
+  60% {
+    box-shadow: 0 0 22px rgba(192, 132, 252, 0.6);
+  }
+  100% {
+    box-shadow: 0 0 0px rgba(192, 132, 252, 0);
+  }
+}

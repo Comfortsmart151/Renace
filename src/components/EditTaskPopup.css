@@ -1,0 +1,231 @@
+/* ------------------------------------------------------
+   OVERLAY OSCURO (DESENFOQUE + TRANSICIÓN)
+------------------------------------------------------ */
+.edit-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  animation: fadeIn 0.25s ease;
+  z-index: 9999;
+}
+
+/* ------------------------------------------------------
+   CARD PRINCIPAL — ACENTO GLOBAL
+------------------------------------------------------ */
+.edit-card {
+  width: 92%;
+  max-width: 420px;
+  position: relative;
+  overflow: hidden;
+
+  background: linear-gradient(
+    135deg,
+    rgba(20, 24, 45, 0.92),
+    rgba(12, 14, 28, 0.92)
+  );
+
+  border: 1px solid var(--border-soft, rgba(255,255,255,0.15));
+  padding: 26px;
+  border-radius: 20px;
+
+  box-shadow:
+    0 14px 34px rgba(0, 0, 0, 0.55),
+    0 0 24px var(--accent-glow);
+
+  backdrop-filter: blur(14px);
+  animation: slideUp 0.3s ease;
+}
+
+/* CAPA DE ACENTO */
+.edit-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+
+  background: radial-gradient(
+    circle at top left,
+    color-mix(in srgb, var(--accent-primary) 22%, transparent),
+    transparent 60%
+  );
+
+  opacity: 0.85;
+  pointer-events: none;
+}
+
+/* CONTENIDO SOBRE EL ACENTO */
+.edit-card > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* ------------------------------------------------------
+   TÍTULO
+------------------------------------------------------ */
+.edit-title {
+  margin: 0 0 20px 0;
+  text-align: center;
+
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--text-main, #f7f3ff);
+}
+
+/* ------------------------------------------------------
+   BOTÓN CERRAR
+------------------------------------------------------ */
+.edit-close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+
+  border: none;
+  background: transparent;
+  font-size: 1.6rem;
+  color: #ffffff;
+  cursor: pointer;
+
+  opacity: 0.8;
+  transition: 0.2s ease;
+}
+
+.edit-close:hover {
+  opacity: 1;
+  transform: scale(1.1);
+}
+
+/* ------------------------------------------------------
+   LABELS
+------------------------------------------------------ */
+.edit-label {
+  display: block;
+  margin-top: 14px;
+
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--text-soft, #e8e1ff);
+}
+
+/* ------------------------------------------------------
+   INPUTS
+------------------------------------------------------ */
+.edit-input,
+.edit-textarea,
+.edit-select {
+  width: 100%;
+  padding: 12px 14px;
+  margin-top: 6px;
+
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--border-soft, rgba(255,255,255,0.15));
+
+  border-radius: 14px;
+  color: #ffffff;
+
+  font-size: 0.95rem;
+  font-weight: 500;
+
+  outline: none;
+  transition: 0.22s ease;
+}
+
+.edit-input:focus,
+.edit-textarea:focus,
+.edit-select:focus {
+  border-color: color-mix(in srgb, var(--accent-primary) 65%, transparent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-primary) 30%, transparent);
+}
+
+.edit-textarea {
+  min-height: 80px;
+  resize: none;
+}
+
+/* ------------------------------------------------------
+   INPUT + ICONO (FECHA / HORA)
+------------------------------------------------------ */
+.edit-input-icon-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.edit-icon-btn {
+  width: 48px;
+  height: 48px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--border-soft, rgba(255,255,255,0.14));
+
+  border-radius: 14px;
+  cursor: pointer;
+
+  color: #ffffff;
+  font-size: 1.2rem;
+
+  transition: 0.2s ease;
+}
+
+.edit-icon-btn:hover {
+  background: rgba(255, 255, 255, 0.16);
+  transform: scale(1.05);
+}
+
+/* ------------------------------------------------------
+   BOTÓN GUARDAR — ACENTO GLOBAL
+------------------------------------------------------ */
+.edit-save-btn {
+  width: 100%;
+  margin-top: 22px;
+  padding: 14px;
+
+  border: none;
+  border-radius: 16px;
+
+  background: linear-gradient(
+    135deg,
+    var(--accent-primary),
+    color-mix(in srgb, var(--accent-primary) 70%, black)
+  );
+
+  color: #ffffff;
+  font-size: 1.05rem;
+  font-weight: 700;
+  cursor: pointer;
+
+  box-shadow: 0 8px 20px var(--accent-glow);
+  transition: 0.25s ease;
+}
+
+.edit-save-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 26px var(--accent-glow);
+}
+
+/* ------------------------------------------------------
+   ANIMACIONES
+------------------------------------------------------ */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(22px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}

@@ -1,0 +1,269 @@
+/* ------------------------------
+   OVERLAY + ANIMACIÓN DE ENTRADA
+------------------------------ */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.25s ease-out;
+  z-index: 9999;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* ------------------------------
+   CARD PRINCIPAL — ACENTO GLOBAL
+------------------------------ */
+.modal-card {
+  width: 92%;
+  max-width: 380px;
+  position: relative;
+  overflow: hidden;
+
+  background: linear-gradient(
+    135deg,
+    rgba(18, 20, 40, 0.92),
+    rgba(10, 12, 26, 0.92)
+  );
+
+  backdrop-filter: blur(20px);
+  border-radius: 20px;
+  padding: 28px;
+  color: #ffffff;
+
+  border: 1px solid var(--border-soft, rgba(255,255,255,0.18));
+
+  box-shadow:
+    0 16px 36px rgba(0, 0, 0, 0.6),
+    0 0 26px var(--accent-glow);
+
+  animation: slideUp 0.28s ease-out;
+}
+
+/* CAPA DE ACENTO */
+.modal-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+
+  background: radial-gradient(
+    circle at top left,
+    color-mix(in srgb, var(--accent-primary) 26%, transparent),
+    transparent 60%
+  );
+
+  opacity: 0.85;
+  pointer-events: none;
+}
+
+/* CONTENIDO SOBRE EL ACENTO */
+.modal-card > * {
+  position: relative;
+  z-index: 1;
+}
+
+@keyframes slideUp {
+  from { transform: translateY(20px); opacity: 0; }
+  to   { transform: translateY(0); opacity: 1; }
+}
+
+/* ------------------------------
+   TÍTULO
+------------------------------ */
+.modal-title {
+  text-align: center;
+  font-size: 1.4rem;
+  margin-bottom: 20px;
+  font-weight: 600;
+  color: var(--text-main, #ffffff);
+}
+
+/* ------------------------------
+   AVATAR
+------------------------------ */
+.modal-avatar-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 14px;
+}
+
+.modal-avatar-img,
+.modal-avatar-placeholder {
+  width: 86px;
+  height: 86px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.06);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 34px;
+  color: #d6ccff;
+
+  border: 2px solid color-mix(in srgb, var(--accent-primary) 55%, transparent);
+
+  box-shadow: 0 0 14px var(--accent-glow);
+  object-fit: cover;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.modal-avatar-img:hover,
+.modal-avatar-placeholder:hover {
+  transform: scale(1.05);
+}
+
+/* ------------------------------
+   BOTONES DE AVATAR
+------------------------------ */
+.avatar-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.btn-secondary {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text-soft, #d8c7ff);
+  padding: 6px 14px;
+  border-radius: 10px;
+  font-size: 0.85rem;
+  cursor: pointer;
+
+  border: 1px solid color-mix(in srgb, var(--accent-primary) 40%, transparent);
+  transition: 0.2s ease;
+}
+
+.btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.14);
+  transform: translateY(-1px);
+}
+
+.upload-btn input {
+  display: none;
+}
+
+/* ------------------------------
+   GRID DE AVATARES
+------------------------------ */
+.avatar-picker-grid {
+  width: 100%;
+  margin-bottom: 20px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  padding: 10px 0;
+  animation: fadeIn 0.25s ease-out;
+}
+
+.avatar-option {
+  width: 70px;
+  height: 70px;
+  border-radius: 12px;
+  background: rgba(255,255,255,0.06);
+
+  cursor: pointer;
+  object-fit: cover;
+
+  border: 2px solid transparent;
+  transition: 0.2s ease;
+}
+
+.avatar-option:hover {
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 12px var(--accent-glow);
+  transform: scale(1.06);
+}
+
+/* ------------------------------
+   INPUTS PREMIUM
+------------------------------ */
+.input-label {
+  font-size: 0.9rem;
+  opacity: 0.85;
+  margin: 10px 0 5px;
+  display: block;
+}
+
+.input-field {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid var(--border-soft, rgba(160,130,255,0.25));
+  padding: 10px 12px;
+  border-radius: 12px;
+
+  color: #ffffff;
+  font-size: 0.9rem;
+  transition: 0.2s ease;
+}
+
+.input-field:focus {
+  border-color: color-mix(in srgb, var(--accent-primary) 70%, transparent);
+  box-shadow: 0 0 10px color-mix(in srgb, var(--accent-primary) 45%, transparent);
+  outline: none;
+}
+
+.textarea {
+  min-height: 80px;
+  resize: none;
+}
+
+/* ------------------------------
+   BOTONES FINALES
+------------------------------ */
+.modal-actions {
+  margin-top: 22px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.btn-cancel {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 10px 14px;
+  border-radius: 12px;
+  color: #dddddd;
+  cursor: pointer;
+  width: 48%;
+
+  border: 1px solid var(--border-soft, rgba(180,140,255,0.25));
+  transition: 0.2s ease;
+}
+
+.btn-cancel:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.btn-save {
+  width: 48%;
+  padding: 10px 14px;
+
+  background: linear-gradient(
+    135deg,
+    var(--accent-primary),
+    color-mix(in srgb, var(--accent-primary) 70%, black)
+  );
+
+  border-radius: 12px;
+  color: #ffffff;
+  cursor: pointer;
+  font-weight: 600;
+  border: none;
+
+  box-shadow: 0 0 18px var(--accent-glow);
+  transition: 0.25s ease;
+}
+
+.btn-save:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 26px var(--accent-glow);
+}

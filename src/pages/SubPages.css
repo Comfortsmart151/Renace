@@ -1,0 +1,128 @@
+/* ----------------------------------------------
+   SUBPAGES — ULTRA PREMIUM RENACE
+   ACENTO GLOBAL
+---------------------------------------------- */
+
+.subpage-wrapper {
+  min-height: 100vh;
+  padding: 24px 16px 100px;
+
+  background:
+    radial-gradient(
+      circle at top left,
+      color-mix(in srgb, var(--accent-primary) 35%, transparent),
+      transparent 45%
+    ),
+    radial-gradient(
+      circle at bottom right,
+      color-mix(in srgb, var(--accent-primary) 30%, transparent),
+      transparent 55%
+    ),
+    var(--bg-main, #020617);
+
+  font-family: "Inter", sans-serif;
+  color: var(--text-main, #e2e8f0);
+}
+
+/* ----------------------------------------------
+   HEADER
+---------------------------------------------- */
+
+.subpage-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.subpage-back {
+  background: rgba(255,255,255,0.08);
+  border: 1px solid var(--border-soft, rgba(255,255,255,0.2));
+
+  width: 38px;
+  height: 38px;
+  border-radius: 12px;
+
+  cursor: pointer;
+  font-size: 18px;
+  color: #fff;
+
+  backdrop-filter: blur(10px);
+  transition: 0.22s ease;
+}
+
+.subpage-back:hover {
+  background: color-mix(
+    in srgb,
+    var(--accent-primary) 25%,
+    rgba(255,255,255,0.12)
+  );
+
+  box-shadow: 0 0 14px var(--accent-glow);
+}
+
+/* ----------------------------------------------
+   TÍTULO
+---------------------------------------------- */
+
+.subpage-header h1 {
+  font-size: 22px;
+  font-weight: 700;
+
+  background: linear-gradient(
+    90deg,
+    var(--accent-primary),
+    color-mix(in srgb, var(--accent-primary) 65%, white)
+  );
+
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* ----------------------------------------------
+   TARJETAS
+---------------------------------------------- */
+
+.subpage-card {
+  background:
+    radial-gradient(
+      circle at 0% 0%,
+      color-mix(in srgb, var(--accent-primary) 22%, transparent),
+      transparent 55%
+    ),
+    var(--bg-card, rgba(15,23,42,0.75));
+
+  border: 1px solid var(--border-soft, rgba(148,163,184,0.25));
+  border-radius: 20px;
+  padding: 18px 16px;
+
+  backdrop-filter: blur(14px);
+  margin-top: 14px;
+
+  box-shadow:
+    0 10px 40px rgba(0,0,0,0.45),
+    0 0 22px var(--accent-glow);
+
+  transition: 0.25s ease;
+}
+
+.subpage-card:hover {
+  transform: translateY(-2px);
+}
+
+/* ----------------------------------------------
+   TEXTO INTERNO
+---------------------------------------------- */
+
+.subpage-card h2 {
+  margin: 0;
+  font-size: 16px;
+  color: var(--text-main, #f8fafc);
+}
+
+.subpage-text {
+  margin-top: 8px;
+  font-size: 13px;
+  color: var(--text-soft, #cbd5e1);
+  line-height: 1.45;
+}

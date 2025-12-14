@@ -1,0 +1,46 @@
+/* ==========================================
+   PROGRESS DOTS — ACENTO GLOBAL
+========================================== */
+
+.progress-dots {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+/* ------------------------------------------
+   DOT BASE
+------------------------------------------ */
+.dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+
+  background: rgba(148, 163, 184, 0.35);
+  backdrop-filter: blur(4px);
+
+  box-shadow:
+    inset 0 0 4px rgba(0,0,0,0.3);
+
+  transition:
+    background 0.25s ease,
+    box-shadow 0.25s ease,
+    transform 0.25s ease;
+}
+
+/* ------------------------------------------
+   DOT ACTIVO / LLENO
+------------------------------------------ */
+.dot.filled {
+  background: linear-gradient(
+    135deg,
+    var(--accent-primary),
+    color-mix(in srgb, var(--accent-primary) 65%, black)
+  );
+
+  box-shadow:
+    0 0 6px var(--accent-glow),
+    0 0 12px var(--accent-glow);
+
+  transform: scale(1.05);
+}

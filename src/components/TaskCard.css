@@ -1,0 +1,83 @@
+/* Tarjeta estilo premium (igual que retos) */
+.taskcard {
+  background: linear-gradient(
+    140deg,
+    rgba(60, 40, 120, 0.45),
+    rgba(30, 20, 60, 0.35)
+  );
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  padding: 20px;
+  margin: 14px 0;
+  border-radius: 18px;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.35);
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  animation: fadeIn 0.25s ease forwards;
+}
+
+/* Animación suave */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Info */
+.tc-info {
+  flex: 1;
+  padding-right: 10px;
+}
+
+.tc-title {
+  color: #fff;
+  font-size: 1.07rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.tc-title.done {
+  opacity: 0.55;
+  text-decoration: line-through;
+}
+
+.tc-desc {
+  font-size: 0.9rem;
+  opacity: 0.75;
+  margin-top: 4px;
+  color: #e8dbff;
+}
+
+/* Acciones */
+.tc-actions {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.tc-btn {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(6px);
+  padding: 10px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.tc-btn:hover {
+  background: rgba(255, 255, 255, 0.18);
+}
+
+/* Iconos más grandes */
+.tc-action-icon {
+  width: 20px;
+  height: 20px;
+  opacity: 0.9;
+}
+
+.tc-action-icon.big {
+  width: 24px;
+  height: 24px;
+}

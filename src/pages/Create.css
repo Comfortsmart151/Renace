@@ -1,0 +1,230 @@
+/* ============================================
+   ESTILO GLOBAL DEL WRAPPER
+============================================ */
+.page-wrapper-create {
+  padding: 22px;
+  padding-bottom: 120px;
+  animation: fadeIn 0.3s ease;
+
+  width: 100%;
+  max-width: 540px;
+  margin: 0 auto;
+
+  color: var(--text-main, #f6f0ff);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ============================================
+   TABS
+============================================ */
+.create-tabs-row {
+  width: 100%;
+  max-width: 540px;
+  margin: 0 auto 22px;
+
+  display: flex;
+  justify-content: space-between;
+
+  background: rgba(255,255,255,0.05);
+  backdrop-filter: blur(14px);
+  padding: 6px;
+  border-radius: 16px;
+  border: 1px solid var(--border-soft, rgba(255,255,255,0.12));
+}
+
+.create-tab {
+  flex: 1;
+  padding: 10px 0;
+  border-radius: 12px;
+  border: none;
+
+  background: transparent;
+  color: var(--text-soft, #cfc3ff);
+  font-weight: 600;
+
+  cursor: pointer;
+  transition: 0.25s ease;
+}
+
+.create-tab-active {
+  background: linear-gradient(
+    135deg,
+    var(--accent-primary),
+    color-mix(in srgb, var(--accent-primary) 70%, black)
+  );
+
+  color: #ffffff;
+  box-shadow: 0 3px 14px var(--accent-glow);
+}
+
+/* ============================================
+   CARD PRINCIPAL
+============================================ */
+.create-card {
+  width: 100%;
+  max-width: 540px;
+
+  background: var(--bg-card, rgba(255,255,255,0.06));
+  border: 1px solid var(--border-soft, rgba(255,255,255,0.14));
+  border-radius: 18px;
+
+  padding: 22px;
+  margin-bottom: 26px;
+
+  backdrop-filter: blur(16px);
+  box-shadow: 0 8px 26px rgba(0,0,0,0.35);
+  animation: fadeIn 0.35s ease;
+}
+
+.create-label {
+  display: block;
+  margin-bottom: 6px;
+
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-soft, #e8dbff);
+}
+
+/* ============================================
+   INPUTS / TEXTAREA
+============================================ */
+.create-input,
+.create-textarea {
+  width: 100%;
+  margin-bottom: 18px;
+  padding: 12px 14px;
+
+  color: var(--text-main, #e9e0ff);
+  font-size: 0.95rem;
+
+  background: rgba(255,255,255,0.05);
+  border: 1px solid var(--border-soft, rgba(255,255,255,0.12));
+  border-radius: 14px;
+
+  backdrop-filter: blur(10px);
+  outline: none;
+
+  transition: 0.22s ease;
+}
+
+.create-input:focus,
+.create-textarea:focus {
+  border-color: var(--accent-primary);
+  background: rgba(255,255,255,0.09);
+  box-shadow: 0 0 0 2px color-mix(
+    in srgb,
+    var(--accent-primary) 40%,
+    transparent
+  );
+}
+
+.create-textarea {
+  min-height: 90px;
+  resize: none;
+}
+
+/* ============================================
+   BOTÓN PRINCIPAL RENACE
+============================================ */
+.create-primary-button {
+  width: 100%;
+  padding: 14px 0;
+
+  font-size: 1rem;
+  font-weight: 700;
+  border: none;
+  border-radius: 14px;
+
+  background: linear-gradient(
+    135deg,
+    var(--accent-primary),
+    color-mix(in srgb, var(--accent-primary) 70%, black)
+  );
+
+  color: #ffffff;
+  cursor: pointer;
+
+  box-shadow: 0 6px 20px var(--accent-glow);
+  transition: transform 0.25s ease,
+              box-shadow 0.25s ease;
+}
+
+.create-primary-button:hover {
+  transform: scale(1.03);
+  box-shadow: 0 8px 26px var(--accent-glow);
+}
+
+.create-primary-button:disabled {
+  opacity: 0.45;
+  transform: none;
+  box-shadow: none;
+  cursor: not-allowed;
+}
+
+/* ============================================
+   MENSAJE DE RETROALIMENTACIÓN
+============================================ */
+.create-message {
+  text-align: center;
+  margin-bottom: 18px;
+  color: var(--text-soft, #d9caff);
+  opacity: 0.8;
+}
+
+/* ==============================================
+   SELECT PREMIUM
+============================================== */
+.create-select {
+  width: 100%;
+  padding: 12px;
+  border-radius: 14px;
+
+  border: 1px solid var(--border-soft, rgba(255,255,255,0.18));
+  background: rgba(255,255,255,0.08);
+
+  color: var(--text-main, #f2eaff);
+  font-size: 1rem;
+  outline: none;
+  appearance: none;
+
+  position: relative;
+  backdrop-filter: blur(12px);
+}
+
+.create-select option {
+  background: #1a1f2e !important;
+  color: #e8ddff !important;
+  padding: 12px;
+  font-size: 0.95rem;
+}
+
+.create-select option:hover {
+  background: color-mix(
+    in srgb,
+    var(--accent-primary) 55%,
+    black
+  ) !important;
+  color: #ffffff !important;
+}
+
+select:focus > option:checked { 
+  background: color-mix(
+    in srgb,
+    var(--accent-primary) 65%,
+    black
+  ) !important;
+  color: #ffffff !important;
+}
+
+.create-select-arrow {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  opacity: 0.7;
+}

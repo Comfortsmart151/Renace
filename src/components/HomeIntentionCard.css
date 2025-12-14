@@ -1,0 +1,126 @@
+/* src/components/HomeIntentionCard.css */
+
+/* ==========================================
+   WRAPPER GENERAL DEL SWIPE
+========================================== */
+.hic-wrapper {
+  position: relative;
+  margin: 8px 0;
+}
+
+/* ==========================================
+   FONDO DE ACCIONES (DEBAJO DE LA TARJETA)
+========================================== */
+.hic-actions {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: stretch;
+  pointer-events: none;
+  border-radius: 18px;
+  overflow: hidden;
+}
+
+/* ------------------------------------------
+   IZQUIERDA → ARCHIVAR (ACENTO GLOBAL SUAVE)
+------------------------------------------ */
+.hic-actions-left {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  padding-left: 14px;
+
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-soft, #e5e7ff);
+
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--accent-primary) 28%, transparent),
+    rgba(56, 189, 248, 0.14)
+  );
+}
+
+/* ------------------------------------------
+   DERECHA → ELIMINAR (ROJO MUY SUAVE)
+------------------------------------------ */
+.hic-actions-right {
+  flex: 1;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding-right: 14px;
+
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #fee2e2;
+
+  background: rgba(248, 113, 113, 0.16);
+}
+
+/* ==========================================
+   TARJETA DESLIZABLE (GLASS + ACENTO)
+========================================== */
+.hic-card {
+  position: relative;
+  z-index: 2;
+  border-radius: 18px;
+  padding: 14px 16px;
+
+  background:
+    radial-gradient(
+      circle at top left,
+      color-mix(in srgb, var(--accent-primary) 18%, transparent),
+      transparent 55%
+    ),
+    rgba(15, 23, 42, 0.88);
+
+  border: 1px solid var(--border-soft, rgba(148, 163, 184, 0.45));
+  backdrop-filter: blur(18px);
+
+  box-shadow:
+    0 16px 40px rgba(15, 23, 42, 0.92),
+    0 0 22px var(--accent-glow);
+
+  transition:
+    transform 0.18s ease,
+    box-shadow 0.18s ease,
+    border-color 0.18s ease;
+}
+
+.hic-card:active {
+  transform: scale(0.985);
+}
+
+/* ------------------------------------------
+   ESTADO ARCHIVADO
+------------------------------------------ */
+.hic-card-archived {
+  opacity: 0.7;
+  border-color: rgba(148, 163, 184, 0.35);
+  box-shadow:
+    0 10px 26px rgba(15, 23, 42, 0.85),
+    0 0 12px color-mix(in srgb, var(--accent-primary) 35%, transparent);
+}
+
+/* ==========================================
+   CONTENIDO
+========================================== */
+.hic-content {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.hic-text {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-main, #f9fafb);
+}
+
+.hic-meta {
+  font-size: 0.78rem;
+  color: var(--text-muted, #9ca3af);
+}

@@ -1,0 +1,29 @@
+.loading-screen {
+  height: 100vh;
+  width: 100%;
+  background: radial-gradient(circle at 40% 0%, #a970ff55, #2d0f44 80%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #ffffffcc;
+  font-family: "Inter", sans-serif;
+  text-align: center;
+}
+
+.loading-logo {
+  font-size: 3.4rem;
+  margin-bottom: 16px;
+  animation: float 2s ease-in-out infinite;
+}
+
+.loading-text {
+  font-size: 1rem;
+  opacity: 0.8;
+  letter-spacing: 0.5px;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50%     { transform: translateY(-6px); }
+}

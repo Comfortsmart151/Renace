@@ -1,0 +1,199 @@
+/* ================================================
+   ACTIVIDAD — ULTRA PREMIUM
+   ACENTO GLOBAL
+================================================ */
+
+.actividad-page {
+  padding: 22px 16px 120px;
+  max-width: 540px;
+  margin: 0 auto;
+
+  color: var(--text-main, #fff);
+  font-family: var(--font-primary);
+
+  animation: fadeInUp 0.35s ease-out;
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ----------------------------------------------
+   BOTÓN VOLVER
+---------------------------------------------- */
+
+.actividad-back {
+  background: rgba(255, 255, 255, 0.07);
+  padding: 6px 12px;
+  border-radius: 10px;
+
+  border: 1px solid var(--border-soft, rgba(255, 255, 255, 0.10));
+  margin-bottom: 16px;
+
+  cursor: pointer;
+  font-size: 13px;
+  color: #fff;
+
+  backdrop-filter: blur(10px);
+  transition: 0.22s ease;
+}
+
+.actividad-back:hover {
+  background: color-mix(
+    in srgb,
+    var(--accent-primary) 22%,
+    rgba(255,255,255,0.12)
+  );
+
+  box-shadow: 0 0 14px var(--accent-glow);
+}
+
+/* ----------------------------------------------
+   HEADER
+---------------------------------------------- */
+
+.actividad-title {
+  font-size: 22px;
+  margin-bottom: 4px;
+
+  background: linear-gradient(
+    90deg,
+    var(--accent-primary),
+    color-mix(in srgb, var(--accent-primary) 65%, white)
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.actividad-sub {
+  font-size: 14px;
+  opacity: 0.75;
+  margin-bottom: 20px;
+  color: var(--text-soft, #cbd5e1);
+}
+
+.actividad-section-title {
+  font-size: 15px;
+  margin-top: 10px;
+  margin-bottom: 6px;
+  font-weight: 600;
+  color: var(--text-main, #fff);
+}
+
+.actividad-sub2 {
+  font-size: 13px;
+  opacity: 0.55;
+  margin-bottom: 18px;
+  color: var(--text-soft, #cbd5e1);
+}
+
+/* ----------------------------------------------
+   TARJETAS DE DÍA
+---------------------------------------------- */
+
+.actividad-card {
+  background:
+    radial-gradient(
+      circle at 0% 0%,
+      color-mix(in srgb, var(--accent-primary) 20%, transparent),
+      transparent 55%
+    ),
+    rgba(255, 255, 255, 0.035);
+
+  border: 1px solid var(--border-soft, rgba(255, 255, 255, 0.06));
+  padding: 16px;
+  border-radius: 16px;
+
+  margin-bottom: 14px;
+  backdrop-filter: blur(14px);
+
+  box-shadow:
+    0 10px 28px rgba(0,0,0,0.45),
+    0 0 18px var(--accent-glow);
+
+  transition: 0.25s ease;
+}
+
+.actividad-card:hover {
+  transform: translateY(-3px);
+  box-shadow:
+    0 14px 34px rgba(0,0,0,0.55),
+    0 0 26px var(--accent-glow);
+}
+
+/* ----------------------------------------------
+   HEADER INTERNO DE TARJETA
+---------------------------------------------- */
+
+.actividad-card-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.actividad-card-dateicon {
+  font-size: 26px;
+  filter: drop-shadow(0 0 10px var(--accent-glow));
+}
+
+.actividad-card-date {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-main, #fff);
+}
+
+.actividad-card-count {
+  font-size: 13px;
+  opacity: 0.7;
+  color: var(--text-soft, #cbd5e1);
+}
+
+/* ----------------------------------------------
+   LISTA DE ACTIVIDADES
+---------------------------------------------- */
+
+.actividad-items {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.actividad-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.actividad-item-icon {
+  font-size: 18px;
+  margin-top: 1px;
+  filter: drop-shadow(0 0 8px var(--accent-glow));
+}
+
+.actividad-item-text {
+  font-size: 14px;
+  opacity: 0.9;
+  color: var(--text-main, #fff);
+}
+
+.actividad-mas {
+  font-size: 13px;
+  opacity: 0.6;
+  margin-top: 4px;
+  color: var(--text-soft, #cbd5e1);
+}
+
+/* ----------------------------------------------
+   ESTADO VACÍO
+---------------------------------------------- */
+
+.actividad-empty {
+  margin-top: 40px;
+  text-align: center;
+  opacity: 0.6;
+  font-size: 14px;
+  color: var(--text-soft, #cbd5e1);
+}

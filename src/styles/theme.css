@@ -1,0 +1,41 @@
+/* =========================================================
+   THEME VARIABLES — RENACE
+========================================================= */
+
+/* ---------- BASE (no dependiente del tema) ---------- */
+:root {
+  --accent-primary: #9b5cff;
+  --accent-glow: rgba(155, 92, 255, 0.45);
+}
+
+/* =========================================================
+   🌙 DARK THEME
+========================================================= */
+.theme-dark {
+  --bg-main: #050816;
+  --bg-card: #0b1020;
+  --bg-card-soft: #10162a;
+  --bg-glass: rgba(15, 23, 42, 0.85);
+  --bg-soft: rgba(255, 255, 255, 0.08);
+
+  --text-main: #f9fafb;
+  --text-muted: #9ca3af;
+
+  --border-soft: rgba(255, 255, 255, 0.12);
+}
+
+/* =========================================================
+   ☀️ LIGHT THEME  ← ESTE ES EL QUE NO TENÍAS BIEN
+========================================================= */
+.theme-light {
+  --bg-main: #f6f7fb;
+  --bg-card: #ffffff;
+  --bg-card-soft: #f2f3f7;
+  --bg-glass: rgba(255, 255, 255, 0.85);
+  --bg-soft: rgba(0, 0, 0, 0.06);
+
+  --text-main: #111827;
+  --text-muted: #6b7280;
+
+  --border-soft: rgba(0, 0, 0, 0.08);
+}
