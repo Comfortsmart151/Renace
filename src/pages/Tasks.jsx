@@ -40,6 +40,7 @@ import {
 export default function Tasks({ onNavigate, focusTaskId, onClearFocus }) {
   const { user } = useAuth();
   const userId = user?.uid || null;
+  const isLogged = !!userId;
 
   const [filter, setFilter] = useState("hoy");
   const [tasks, setTasks] = useState([]);
@@ -58,9 +59,9 @@ export default function Tasks({ onNavigate, focusTaskId, onClearFocus }) {
   --------------------------------------------------------------- */
   useEffect(() => {
     async function loadUserSettings() {
-      if (!user) return;
+      if (!userId) return;
 
-      const ref = doc(db, "users", user.uid);
+      const ref = doc(db, "users", userId);
       const snap = await getDoc(ref);
 
       if (snap.exists()) {
@@ -69,7 +70,7 @@ export default function Tasks({ onNavigate, focusTaskId, onClearFocus }) {
     }
 
     loadUserSettings();
-  }, [user]);
+  }, [userId]);
 
   /* ---------------------------------------------------------------
         INICIALIZAR GAPI + TOKEN CLIENT (solo si calendarEnabled)
@@ -92,19 +93,44 @@ export default function Tasks({ onNavigate, focusTaskId, onClearFocus }) {
   }, [calendarEnabled]);
 
   /* ---------------------------------------------------------------
-        ESCUCHAR TAREAS FIRESTORE
+        belongsToUser → SOLO tareas del usuario
+  --------------------------------------------------------------- */
+  const belongsToUser = (data) => {
+    const owner =
+      data?.userId ||
+      data?.uid ||
+      data?.ownerId ||
+      data?.createdBy ||
+      data?.user ||
+      null;
+
+    if (!userId) return false;
+    if (!owner) return false;
+    return owner === userId;
+  };
+
+  /* ---------------------------------------------------------------
+        ESCUCHAR TAREAS FIRESTORE SOLO DEL USUARIO
   --------------------------------------------------------------- */
   useEffect(() => {
+    if (!userId) {
+      setTasks([]);
+      return;
+    }
+
     const baseCol = collection(db, "tasks");
     const q = query(baseCol, orderBy("createdAt", "asc"));
 
     const unsub = onSnapshot(
       q,
       (snapshot) => {
-        const loaded = snapshot.docs.map((d) => ({
-          id: d.id,
-          ...d.data(),
-        }));
+        const loaded = snapshot.docs
+          .map((d) => ({
+            id: d.id,
+            ...d.data(),
+          }))
+          .filter((t) => belongsToUser(t));
+
         setTasks(loaded);
       },
       (err) => {
@@ -113,7 +139,7 @@ export default function Tasks({ onNavigate, focusTaskId, onClearFocus }) {
     );
 
     return () => unsub();
-  }, []);
+  }, [userId]);
 
   /* ---------------------------------------------------------------
         AUTO-SCROLL PARA MOSTRAR TAREA DESTACADA
@@ -137,7 +163,7 @@ export default function Tasks({ onNavigate, focusTaskId, onClearFocus }) {
 
   /* ================================================================
      🟣 FUNCIONES DE SINCRONIZACIÓN CON GOOGLE CALENDAR
-     ============================================================== */
+  ============================================================== */
 
   async function ensureCalendarAccess() {
     if (!calendarEnabled) return false;
@@ -155,8 +181,14 @@ export default function Tasks({ onNavigate, focusTaskId, onClearFocus }) {
         CREAR TAREA → OPCIONAL: CREAR EVENTO EN CALENDAR
   --------------------------------------------------------------- */
   async function addTask(newTask) {
+    if (!userId) {
+      alert("Debes iniciar sesión para crear tareas.");
+      return;
+    }
+
     try {
       const payload = {
+        userId,
         title: newTask.title?.trim() || "",
         description: newTask.description?.trim() || "",
         completed: false,
@@ -175,8 +207,12 @@ export default function Tasks({ onNavigate, focusTaskId, onClearFocus }) {
       if (calendarEnabled && payload.deadlineDate) {
         const ok = await ensureCalendarAccess();
         if (ok) {
-          const start = `${payload.deadlineDate}T${payload.deadlineTime || "09:00"}:00`;
-          const end = `${payload.deadlineDate}T${payload.deadlineTime || "10:00"}:00`;
+          const start = `${payload.deadlineDate}T${
+            payload.deadlineTime || "09:00"
+          }:00`;
+          const end = `${payload.deadlineDate}T${
+            payload.deadlineTime || "10:00"
+          }:00`;
 
           const event = await createCalendarEvent({
             title: payload.title,
@@ -251,8 +287,12 @@ export default function Tasks({ onNavigate, focusTaskId, onClearFocus }) {
       if (calendarEnabled && updatedTask.calendarEventId) {
         const ok = await ensureCalendarAccess();
         if (ok) {
-          const start = `${payload.deadlineDate}T${payload.deadlineTime || "09:00"}:00`;
-          const end = `${payload.deadlineDate}T${payload.deadlineTime || "10:00"}:00`;
+          const start = `${payload.deadlineDate}T${
+            payload.deadlineTime || "09:00"
+          }:00`;
+          const end = `${payload.deadlineDate}T${
+            payload.deadlineTime || "10:00"
+          }:00`;
 
           await updateCalendarEvent(updatedTask.calendarEventId, {
             title: payload.title,
@@ -312,7 +352,9 @@ export default function Tasks({ onNavigate, focusTaskId, onClearFocus }) {
   function getTaskStatus(task) {
     if (!task.deadlineDate) return "normal";
 
-    const deadline = new Date(`${task.deadlineDate}T${task.deadlineTime || "23:59"}`);
+    const deadline = new Date(
+      `${task.deadlineDate}T${task.deadlineTime || "23:59"}`
+    );
     const now = new Date();
 
     const diffH = (deadline - now) / (1000 * 60 * 60);
@@ -322,24 +364,57 @@ export default function Tasks({ onNavigate, focusTaskId, onClearFocus }) {
   }
 
   /* ---------------------------------------------------------------
-        UI
+        RENDER
   --------------------------------------------------------------- */
+  if (!isLogged) {
+    return (
+      <div className="tasks-page tasks-page-guest">
+        <div className="tasks-banner">
+          <h2 className="tasks-banner-title">Organiza tu día</h2>
+          <p className="tasks-banner-sub">
+            Inicia sesión para guardar y ver tus tareas personales.
+          </p>
+        </div>
+
+        {onNavigate && (
+          <button
+            className="empty-add-btn"
+            onClick={() => onNavigate("profile")}
+          >
+            Ir al perfil / iniciar sesión
+          </button>
+        )}
+      </div>
+    );
+  }
+
   return (
     <div className="tasks-page">
       <div className="tasks-banner">
         <h2 className="tasks-banner-title">Organiza tu día</h2>
-        <p className="tasks-banner-sub">Pequeños pasos crean grandes cambios.</p>
+        <p className="tasks-banner-sub">
+          Pequeños pasos crean grandes cambios.
+        </p>
       </div>
 
       {/* FILTROS */}
       <div className="tasks-filters">
-        <button className={filter === "hoy" ? "active" : ""} onClick={() => setFilter("hoy")}>
+        <button
+          className={filter === "hoy" ? "active" : ""}
+          onClick={() => setFilter("hoy")}
+        >
           Hoy
         </button>
-        <button className={filter === "pendientes" ? "active" : ""} onClick={() => setFilter("pendientes")}>
+        <button
+          className={filter === "pendientes" ? "active" : ""}
+          onClick={() => setFilter("pendientes")}
+        >
           Pendientes
         </button>
-        <button className={filter === "completadas" ? "active" : ""} onClick={() => setFilter("completadas")}>
+        <button
+          className={filter === "completadas" ? "active" : ""}
+          onClick={() => setFilter("completadas")}
+        >
           Completadas
         </button>
       </div>
@@ -351,13 +426,19 @@ export default function Tasks({ onNavigate, focusTaskId, onClearFocus }) {
             <i className="ri-checkbox-blank-circle-line" />
             <h3>Sin tareas aquí</h3>
             <p>Crea tu primera tarea para empezar a tomar acción.</p>
-            <button className="empty-add-btn" onClick={() => setShowPopup(true)}>
+            <button
+              className="empty-add-btn"
+              onClick={() => setShowPopup(true)}
+            >
               Añadir tarea
             </button>
           </div>
         ) : (
           filteredTasks.map((task) => (
-            <div key={task.id} ref={(el) => (taskRefs.current[task.id] = el)}>
+            <div
+              key={task.id}
+              ref={(el) => (taskRefs.current[task.id] = el)}
+            >
               <TaskCard
                 task={task}
                 status={getTaskStatus(task)}

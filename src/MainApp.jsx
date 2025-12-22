@@ -237,7 +237,13 @@ export default function MainApp() {
             />
           )}
 
-          {tab === "create" && <Create onNavigate={handleNavigate} />}
+          {tab === "create" && (
+  <Create
+    onNavigate={handleNavigate}
+    initialTab={navigation.taskId || "intencion"}
+  />
+)}
+
           {tab === "historial" && <Historial onNavigate={handleNavigate} />}
           {tab === "retos" && <Retos onNavigate={handleNavigate} />}
           {tab === "profile" && <Profile onNavigate={handleNavigate} />}

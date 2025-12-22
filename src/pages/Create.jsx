@@ -17,12 +17,16 @@ import { useNotifications } from "../hooks/useNotifications";
 
 import { syncCreateTaskCalendar } from "../utils/taskCalendarSync";
 
-export default function Create() {
-  const [tab, setTab] = useState("tarea");
+export default function Create({ onNavigate }) {
+  // ✅ por defecto abrir en INTENCIÓN
+  const [tab, setTab] = useState("intencion");
 
   const { user } = useAuth();
   const { settings } = useSettings();
   const { notify } = useNotifications();
+
+  const userId = user?.uid || null;
+  const isLogged = !!userId;
 
   // Estados intención
   const [intencion, setIntencion] = useState("");
@@ -42,10 +46,13 @@ export default function Create() {
   const [guardando, setGuardando] = useState(false);
 
   /* ----------------------------------------
-     HISTORIAL
+     HISTORIAL (solo si hay usuario)
   ---------------------------------------- */
   const guardarEnHistorial = async (tipo, payload) => {
+    if (!userId) return; // no guardamos historial sin usuario
+
     await addDoc(collection(db, "historial"), {
+      userId,
       tipo,
       ...payload,
       fecha: Timestamp.now(),
@@ -61,10 +68,16 @@ export default function Create() {
       return;
     }
 
+    if (!isLogged) {
+      setMensaje("Debes iniciar sesión para guardar intenciones.");
+      return;
+    }
+
     setGuardando(true);
 
     try {
       await addDoc(collection(db, "intenciones"), {
+        userId,
         texto: intencion,
         motivo: motivoIntencion || "",
         fecha: Timestamp.now(),
@@ -110,10 +123,16 @@ export default function Create() {
       return;
     }
 
+    if (!isLogged) {
+      setMensaje("Debes iniciar sesión para guardar tareas.");
+      return;
+    }
+
     setGuardando(true);
 
     try {
       const taskPayload = {
+        userId,
         title: tarea,
         description: "",
         completed: false,
@@ -168,10 +187,16 @@ export default function Create() {
       return;
     }
 
+    if (!isLogged) {
+      setMensaje("Debes iniciar sesión para guardar logros.");
+      return;
+    }
+
     setGuardando(true);
 
     try {
       await addDoc(collection(db, "logros"), {
+        userId,
         texto: logro,
         fecha: Timestamp.now(),
       });
@@ -181,6 +206,7 @@ export default function Create() {
       setLogro("");
       setMensaje("Logro guardado ✔");
     } catch (err) {
+      console.error(err);
       setMensaje("Error guardando logro.");
     }
 
@@ -190,6 +216,36 @@ export default function Create() {
   /* ----------------------------------------
      RENDER
   ---------------------------------------- */
+  if (!isLogged) {
+    return (
+      <div className="page-wrapper-create">
+        <div className="create-tabs-row">
+          <button className="create-tab create-tab-active">Intención</button>
+          <button className="create-tab" disabled>
+            Tarea
+          </button>
+          <button className="create-tab" disabled>
+            Logro
+          </button>
+        </div>
+
+        <p className="create-message">
+          Para guardar intenciones, tareas y logros, inicia sesión desde tu
+          perfil.
+        </p>
+
+        {onNavigate && (
+          <button
+            className="create-primary-button"
+            onClick={() => onNavigate("profile")}
+          >
+            Ir al perfil / iniciar sesión
+          </button>
+        )}
+      </div>
+    );
+  }
+
   return (
     <div className="page-wrapper-create">
       {/* TABS */}

@@ -226,12 +226,10 @@ export default function Home({ onNavigate }) {
   const { user } = useAuth();
   const { settings } = useSettings();
 
-  // 🔥 FIX MÁXIMO → Si no hay login, usar el uid fijo que SÍ existe.
-  const uid = user?.uid || "alex";
+  const uid = user?.uid || null;
+  const isLogged = !!user?.uid;
+  const LEGACY_OWNER = "alex";
 
-  // ------------------------------------------
-  // STATES
-  // ------------------------------------------
   const [bannerImage, setBannerImage] = useState("1.jpg");
   const [bannerText, setBannerText] = useState("");
   const [dailyPhrase, setDailyPhrase] = useState("");
@@ -245,7 +243,6 @@ export default function Home({ onNavigate }) {
   const [mainObjective, setMainObjective] = useState("");
   const [objectiveProgress, setObjectiveProgress] = useState(0);
 
-  // 🔥 FASE 10 — Resumen visual semanal (solo domingo)
   const [weeklyVisual, setWeeklyVisual] = useState({
     intentions: 0,
     tasks: 0,
@@ -255,6 +252,22 @@ export default function Home({ onNavigate }) {
 
   const lastIntention = useRef(null);
 
+  /* ----------------------------------------------------------
+     belongsToUser corregido
+  ---------------------------------------------------------- */
+  const belongsToUser = (data) => {
+    const owner =
+      data?.uid ||
+      data?.userId ||
+      data?.ownerId ||
+      data?.createdBy ||
+      data?.user ||
+      null;
+
+    if (!isLogged) return false;
+    if (!owner) return uid === LEGACY_OWNER;
+    return owner === uid;
+  };
   /* ------------------------------------------
      EFECTOS INICIALES
   ------------------------------------------ */
@@ -267,12 +280,18 @@ export default function Home({ onNavigate }) {
       greetingPhrases[Math.floor(Math.random() * greetingPhrases.length)]
     );
 
-    escucharIntencionHoy();
-    escucharTareas();
+    if (isLogged) {
+      escucharIntencionHoy();
+      escucharTareas();
+    } else {
+      setIntencionHoy(null);
+      setUrgentTasks([]);
+      setLateTasks([]);
+    }
   }, []);
 
   /* ------------------------------------------
-     CARGAR PERFIL DESDE FIRESTORE
+     CARGAR PERFIL DESDE FIRESTORE (solo loggeado)
   ------------------------------------------ */
   useEffect(() => {
     if (!uid) return;
@@ -287,7 +306,7 @@ export default function Home({ onNavigate }) {
   }, [uid]);
 
   /* ------------------------------------------
-     OBJETIVO CENTRAL
+     OBJETIVO CENTRAL (solo loggeado)
   ------------------------------------------ */
   useEffect(() => {
     if (!uid) return;
@@ -305,19 +324,16 @@ export default function Home({ onNavigate }) {
 
   /* ------------------------------------------
      🔥 FASE 10 — RESUMEN VISUAL SEMANAL (DOMINGO)
-     Fuente: colección "historial" (Create guarda aquí)
-     Estrategia: orderBy + limit y filtrado local (sin índices extra)
+     Fuente: colección "historial"
   ------------------------------------------ */
   useEffect(() => {
-    // Solo si el usuario quiere ver resumen semanal
     if (!settings.weeklySummary) return;
+    if (!isLogged) return;
 
-    // Solo domingo
     const today = new Date();
     const isSunday = today.getDay() === 0;
     if (!isSunday) return;
 
-    // Rango últimos 7 días
     const since = new Date();
     since.setDate(since.getDate() - 7);
 
@@ -336,8 +352,8 @@ export default function Home({ onNavigate }) {
 
       snap.forEach((d) => {
         const data = d.data();
+        if (!belongsToUser(data)) return;
 
-        // fecha puede venir como Timestamp
         const date =
           data.fecha?.toDate?.() || (data.fecha ? new Date(data.fecha) : null);
 
@@ -374,10 +390,10 @@ export default function Home({ onNavigate }) {
         highlight,
       });
     });
-  }, [settings.weeklySummary]);
+  }, [settings.weeklySummary, isLogged]);
 
   /* ------------------------------------------
-     INTENCIÓN DEL DÍA
+     INTENCIÓN DEL DÍA (solo loggeado)
   ------------------------------------------ */
   const escucharIntencionHoy = () => {
     const hoy = new Date();
@@ -387,7 +403,7 @@ export default function Home({ onNavigate }) {
       collection(db, "intenciones"),
       where("fecha", ">=", hoy),
       where("archivado", "==", false),
-      limit(1)
+      limit(20)
     );
 
     return onSnapshot(q, (snapshot) => {
@@ -397,7 +413,15 @@ export default function Home({ onNavigate }) {
         return;
       }
 
-      const data = snapshot.docs[0].data();
+      const ownedDoc = snapshot.docs.find((d) => belongsToUser(d.data()));
+
+      if (!ownedDoc) {
+        setIntencionHoy(null);
+        lastIntention.current = null;
+        return;
+      }
+
+      const data = ownedDoc.data();
 
       if (lastIntention.current !== data.texto) {
         setIntencionHoy({
@@ -408,20 +432,24 @@ export default function Home({ onNavigate }) {
         lastIntention.current = data.texto;
 
         setTimeout(() => {
-          setIntencionHoy((old) => (old ? { ...old, __animate: false } : null));
+          setIntencionHoy((old) =>
+            old ? { ...old, __animate: false } : null
+          );
         }, 800);
       }
     });
   };
 
   /* ------------------------------------------
-     TAREAS URGENTES / ATRASADAS
+     TAREAS URGENTES / ATRASADAS (solo loggeado)
   ------------------------------------------ */
   const escucharTareas = () => {
     const q = query(collection(db, "tasks"), orderBy("createdAt", "asc"));
 
     return onSnapshot(q, (snapshot) => {
-      const tasks = snapshot.docs.map((d) => ({ id: d.id, ...d.data() }));
+      const tasks = snapshot.docs
+        .map((d) => ({ id: d.id, ...d.data() }))
+        .filter((t) => belongsToUser(t));
 
       const urgent = [];
       const late = [];
@@ -454,32 +482,30 @@ export default function Home({ onNavigate }) {
       : onNavigate("tasks");
 
   const handleGoToLate = () =>
-    lateCount > 0 ? onNavigate("tasks", lateTasks[0].id) : onNavigate("tasks");
+    lateCount > 0
+      ? onNavigate("tasks", lateTasks[0].id)
+      : onNavigate("tasks");
 
   /* ------------------------------------------
      SALUDO FINAL DINÁMICO
   ------------------------------------------ */
   const obtenerSaludo = () => {
-  const h = new Date().getHours();
-  if (h < 12) return "Buenos días";
-  if (h < 18) return "Buenas tardes";
-  return "Buenas noches";
-};
+    const h = new Date().getHours();
+    if (h < 12) return "Buenos días";
+    if (h < 18) return "Buenas tardes";
+    return "Buenas noches";
+  };
 
-const saludo = user
-  ? `${obtenerSaludo()}, ${perfil.nombre || user.displayName || "Usuario"}`
-  : obtenerSaludo();
-
+  const saludo = user
+    ? `${obtenerSaludo()}, ${perfil.nombre || user.displayName || "Usuario"}`
+    : obtenerSaludo();
 
   const isSunday = new Date().getDay() === 0;
-
   /* ------------------------------------------
      RENDER
   ------------------------------------------ */
-
-    return (
+  return (
     <div className="home-page home-container">
-
       {/* BANNER */}
       <div className="home-banner">
         <img src={`/banners/${bannerImage}`} className="banner-img" />
@@ -491,7 +517,7 @@ const saludo = user
       <h2 className="greeting">{saludo}</h2>
 
       {/* 🔥 FASE 10 — RESUMEN VISUAL SEMANAL (DOMINGO) */}
-      {settings.weeklySummary && isSunday && (
+      {settings.weeklySummary && isSunday && isLogged && (
         <div className="premium-card weekly-summary-visual-card">
           <div className="ws-header">
             <span className="ws-icon">📊</span>
@@ -526,18 +552,15 @@ const saludo = user
           </div>
 
           <div className="ws-actions">
-            <button
-              className="ws-btn"
-              onClick={() => onNavigate("historial")}
-            >
+            <button className="ws-btn" onClick={() => onNavigate("historial")}>
               Ver historial
             </button>
 
             <button
               className="ws-btn ws-btn-soft"
-              onClick={() => onNavigate("create")}
+              onClick={() => onNavigate("create", "intencion")}
             >
-              Crear nueva intención
+              Crear intención
             </button>
           </div>
         </div>
@@ -564,9 +587,7 @@ const saludo = user
           />
         </div>
 
-        <p className="om-progress-label">
-          {objectiveProgress}% completado
-        </p>
+        <p className="om-progress-label">{objectiveProgress}% completado</p>
       </div>
 
       {/* FRASE DEL DÍA */}
@@ -607,7 +628,7 @@ const saludo = user
 
         <button
           className="intention-btn"
-          onClick={() => onNavigate("create")}
+          onClick={() => onNavigate("create", "intencion")}
         >
           {intencionHoy ? "Agregar otra intención" : "Escribir mi intención"}
         </button>

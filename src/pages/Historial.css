@@ -76,7 +76,6 @@
   position: relative;
 }
 
-/* tarjeta glass premium */
 .swipe-card {
   position: relative;
   z-index: 2;
@@ -112,15 +111,13 @@
   transform: scale(0.98);
 }
 
-/* ================= Contenido ================= */
-
 .timeline-card {
   display: flex;
   flex-direction: column;
   gap: 6px;
 }
 
-/* top: icono + tipo + fecha */
+/* icono + top */
 .timeline-card-top {
   display: flex;
   align-items: center;
@@ -166,8 +163,6 @@
   opacity: 0.9;
 }
 
-/* ================= Texto ================= */
-
 .item-title {
   margin: 0;
   font-size: 0.95rem;
@@ -181,8 +176,6 @@
   color: var(--text-soft, #cbd5f5);
   opacity: 0.9;
 }
-
-/* ================= Meta / Chips ================= */
 
 .item-meta {
   margin-top: 4px;
@@ -202,8 +195,6 @@
   color: var(--text-main, #e5e7eb);
 }
 
-/* ================= Archivados ================= */
-
 .timeline-card-archived .item-title,
 .timeline-card-archived .item-motivo {
   opacity: 0.7;
@@ -216,8 +207,7 @@
   font-style: italic;
 }
 
-/* ================= Animación ================= */
-
+/* Animación */
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -227,4 +217,80 @@
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+/* ======================================================
+   🟣 ESTADO INVITADO — NUEVO
+====================================================== */
+
+.historial-guest-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 24px;
+  height: calc(100vh - 110px);
+  text-align: center;
+}
+
+.historial-guest-box {
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(16px);
+  border-radius: 20px;
+  padding: 32px 28px;
+  max-width: 420px;
+  width: 100%;
+  box-shadow: 0 0 22px rgba(150, 90, 240, 0.25);
+  border: 1px solid rgba(255,255,255,0.12);
+}
+
+.historial-guest-title {
+  font-size: 1.65rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+  color: white;
+}
+
+.historial-guest-text {
+  font-size: 0.98rem;
+  opacity: 0.85;
+  margin-bottom: 24px;
+}
+
+/* login button lilac */
+.historial-login-btn {
+  background: linear-gradient(90deg, #a46bff, #7a35ff);
+  padding: 12px 24px;
+  border-radius: 14px;
+  border: none;
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+  width: 100%;
+  margin-bottom: 12px;
+  transition: 0.2s ease;
+}
+
+.historial-login-btn:hover {
+  opacity: 0.9;
+}
+
+/* Google & Apple themed */
+.historial-login-btn.google {
+  background: #fff;
+  color: #222;
+}
+
+.historial-login-btn.google:hover {
+  background: #efefef;
+}
+
+.historial-login-btn.apple {
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.25);
+  color: #fff;
+}
+
+.historial-login-btn.settings-btn {
+  background: rgba(255,255,255,0.08);
+  color: #ddd;
 }

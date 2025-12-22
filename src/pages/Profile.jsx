@@ -3,22 +3,54 @@ import React, { useEffect, useState } from "react";
 import "./Profile.css";
 
 import { useAuth } from "../context/AuthContext";
-
-import { db } from "../firebase";
+import { db, auth } from "../firebase";
 import {
   collection,
   onSnapshot,
   doc,
+  getDoc,
+  setDoc,
 } from "firebase/firestore";
 
 import EditProfileModal from "../components/EditProfileModal";
 
-export default function Profile({ onNavigate }) {
+// FIREBASE LOGIN PROVIDERS
+import {
+  GoogleAuthProvider,
+  OAuthProvider,
+  signInWithPopup,
+} from "firebase/auth";
 
+export default function Profile({ onNavigate }) {
   const { user, logout } = useAuth();
 
   /* =======================================================
-     1) PERFIL LOCAL → SIEMPRE CARGA PRIMERO
+     0) LOGIN BUTTON HANDLERS
+  ======================================================= */
+  const loginWithGoogle = async () => {
+    try {
+      const provider = new GoogleAuthProvider();
+      await signInWithPopup(auth, provider);
+
+      // opcional: feedback o toast
+    } catch (err) {
+      console.error("❌ Google login error:", err);
+      alert("No se pudo iniciar sesión con Google.");
+    }
+  };
+
+  const loginWithApple = async () => {
+    try {
+      const provider = new OAuthProvider("apple.com");
+      await signInWithPopup(auth, provider);
+    } catch (err) {
+      console.error("❌ Apple login error:", err);
+      alert("No se pudo iniciar sesión con Apple.");
+    }
+  };
+
+  /* =======================================================
+     1) PERFIL LOCAL (SIEMPRE)
   ======================================================= */
   const getLocalProfile = () => {
     try {
@@ -52,10 +84,10 @@ export default function Profile({ onNavigate }) {
   const [lastIntention, setLastIntention] = useState("");
 
   /* =======================================================
-     2) PERFIL FIRESTORE → SOLO SI user existe
+     2) PERFIL FIRESTORE SOLO SI HAY USER
   ======================================================= */
   useEffect(() => {
-    if (!user) return; // 🔥 IMPORTANTE para evitar errores
+    if (!user) return;
 
     const ref = doc(db, "users", user.uid, "data", "perfil");
 
@@ -70,10 +102,8 @@ export default function Profile({ onNavigate }) {
         };
 
         setPerfil(merged);
-
         localStorage.setItem("renace_profile", JSON.stringify(merged));
       } else {
-        // No existe en Firebase → usar datos de Google
         const newData = {
           nombre: user.displayName || perfil.nombre,
           tagline: perfil.tagline,
@@ -90,17 +120,18 @@ export default function Profile({ onNavigate }) {
   }, [user]);
 
   /* =======================================================
-     3) SI CAMBIA EL PERFIL → GUARDAR LOCAL
+     3) AUTO-GUARDAR LOCAL
   ======================================================= */
   useEffect(() => {
     localStorage.setItem("renace_profile", JSON.stringify(perfil));
   }, [perfil]);
 
-
   /* =======================================================
      4) ÚLTIMA INTENCIÓN
   ======================================================= */
   useEffect(() => {
+    if (!user) return;
+
     const col = collection(db, "intenciones");
     const unsub = onSnapshot(col, (snap) => {
       setIntencionesCount(snap.size);
@@ -125,12 +156,14 @@ export default function Profile({ onNavigate }) {
     });
 
     return () => unsub();
-  }, []);
+  }, [user]);
 
   /* =======================================================
      5) TAREAS
   ======================================================= */
   useEffect(() => {
+    if (!user) return;
+
     const col = collection(db, "tasks");
     const unsub = onSnapshot(col, (snap) => {
       const today = new Date().toISOString().slice(0, 10);
@@ -152,12 +185,14 @@ export default function Profile({ onNavigate }) {
     });
 
     return () => unsub();
-  }, []);
+  }, [user]);
 
   /* =======================================================
      6) RETOS
   ======================================================= */
   useEffect(() => {
+    if (!user) return;
+
     const col = collection(db, "retos");
     const unsub = onSnapshot(col, (snap) => {
       let total = 0;
@@ -171,12 +206,14 @@ export default function Profile({ onNavigate }) {
     });
 
     return () => unsub();
-  }, []);
+  }, [user]);
 
   /* =======================================================
      7) DÍAS ACTIVOS
   ======================================================= */
   useEffect(() => {
+    if (!user) return;
+
     const col = collection(db, "historial");
     const unsub = onSnapshot(col, (snap) => {
       const set = new Set();
@@ -190,7 +227,7 @@ export default function Profile({ onNavigate }) {
     });
 
     return () => unsub();
-  }, []);
+  }, [user]);
 
   /* =======================================================
      8) NIVEL RENACE
@@ -206,7 +243,7 @@ export default function Profile({ onNavigate }) {
   const faltan = 100 - pct;
 
   /* =======================================================
-     9) AVATAR DISPLAY
+     AVATAR
   ======================================================= */
   const renderAvatar = () => {
     if (perfil.avatarUrl)
@@ -226,13 +263,49 @@ export default function Profile({ onNavigate }) {
   };
 
   /* =======================================================
-     10) RENDER
+     🟣 UI DEL INVITADO — LOGIN VIEW
+  ======================================================= */
+  if (!user) {
+    return (
+      <div className="profile-page guest-center">
+        <div className="guest-card">
+          <h2 className="guest-title">Perfil</h2>
+          <p className="guest-sub">
+            Inicia sesión para sincronizar tu progreso
+            y guardar tus avances en la nube.
+          </p>
+
+          <button className="login-btn google" onClick={loginWithGoogle}>
+            🟣 Continuar con Google
+          </button>
+
+          <button className="login-btn apple" onClick={loginWithApple}>
+             Continuar con Apple
+          </button>
+
+          <button
+            className="login-btn settings-nav"
+            onClick={() => onNavigate("settings")}
+          >
+            Ir a ajustes / vincular cuenta
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  /* =======================================================
+     UI PARA USUARIOS LOGGEADOS
   ======================================================= */
   return (
     <div className="profile-page">
-
       <div className="split-header-card">
-        <button className="settings-button-top" onClick={() => onNavigate("settings")}>⚙️</button>
+        <button
+          className="settings-button-top"
+          onClick={() => onNavigate("settings")}
+        >
+          ⚙️
+        </button>
 
         {renderAvatar()}
 
@@ -249,7 +322,6 @@ export default function Profile({ onNavigate }) {
         </button>
       </div>
 
-      {/* TU CONTENIDO COMPLETO SIGUE IGUAL */}
       {/* NIVEL */}
       <div className="profile-level-card">
         <h3 className="level-title">Nivel Renace</h3>
@@ -262,7 +334,8 @@ export default function Profile({ onNavigate }) {
         </div>
 
         <p className="profile-xp-helper">
-          Te faltan <span className="profile-xp-strong">{faltan}</span> pts para subir de nivel.
+          Te faltan <span className="profile-xp-strong">{faltan}</span> pts
+          para subir de nivel.
         </p>
       </div>
 
@@ -300,7 +373,7 @@ export default function Profile({ onNavigate }) {
         </div>
       </section>
 
-      {/* PREMIUM */}
+      {/* ACCIONES PREMIUM */}
       <section className="profile-section">
         <div className="profile-section-header">
           <h2>Acciones premium</h2>
@@ -360,7 +433,6 @@ export default function Profile({ onNavigate }) {
           user={user}
         />
       )}
-
     </div>
   );
 }

@@ -142,7 +142,7 @@ export default function ObjectiveMain({ onNavigate }) {
   ];
 
   /* ------------------------------------------
-     CARGAR EN TIEMPO REAL DESDE FIRESTORE
+     CARGAR DESDE FIRESTORE SOLO PARA EL USER
   ------------------------------------------ */
   useEffect(() => {
     if (!userId) return;
@@ -152,6 +152,7 @@ export default function ObjectiveMain({ onNavigate }) {
     const unsub = onSnapshot(objetivoRef, async (snap) => {
       if (!snap.exists()) {
         await setDoc(objetivoRef, {
+          userId,
           objective: "Crear una vida más organizada y enfocada",
           why: "Quiero sentir claridad y disciplina.",
           progress: 0,
@@ -161,6 +162,7 @@ export default function ObjectiveMain({ onNavigate }) {
             { id: 3, text: "Escribir mi intención diaria", done: false },
           ],
         });
+
         return;
       }
 
@@ -176,7 +178,7 @@ export default function ObjectiveMain({ onNavigate }) {
   }, [userId]);
 
   /* ------------------------------------------
-     FRASE DE MOTIVACIÓN VINCULADA AL OBJETIVO
+     FRASE MOTIVACIONAL PERSONALIZADA
   ------------------------------------------ */
   useEffect(() => {
     if (!objective) return;
@@ -188,8 +190,7 @@ export default function ObjectiveMain({ onNavigate }) {
   }, [objective]);
 
   /* ------------------------------------------
-     SNAPSHOT MENSUAL AUTOMÁTICO
-     users/{uid}/historialObjetivos/AAAA-MM
+     SNAPSHOT MENSUAL POR USUARIO
   ------------------------------------------ */
   useEffect(() => {
     if (!loaded || !userId) return;
@@ -215,6 +216,7 @@ export default function ObjectiveMain({ onNavigate }) {
       const completados = subSteps.filter((s) => s.done).length;
 
       await setDoc(histRef, {
+        userId,
         objective,
         why,
         progresoFinal: progress,
@@ -228,7 +230,7 @@ export default function ObjectiveMain({ onNavigate }) {
   }, [loaded, userId, objective, why, progress, subSteps]);
 
   /* ------------------------------------------
-     EDITAR SUB-STEPS Y PROGRESO
+     ACTUALIZAR PASOS / PROGRESO
   ------------------------------------------ */
   const recomputeProgressAndSave = async (updatedSteps) => {
     if (!userId) return;
@@ -266,7 +268,7 @@ export default function ObjectiveMain({ onNavigate }) {
   };
 
   /* ------------------------------------------
-     GUARDAR CAMBIOS DEL OBJETIVO Y WHY
+     GUARDAR CAMBIOS DEL OBJETIVO
   ------------------------------------------ */
   const updateObjective = async (newObj, newWhy) => {
     if (!userId) return;
@@ -278,11 +280,10 @@ export default function ObjectiveMain({ onNavigate }) {
       why: newWhy,
     });
 
-    // 🔥 Registrar actividad: objetivo actualizado
     await registerActivity({
       userId,
       tipo: "objetivo_actualizado",
-      descripcion: "Actualizaste tu objetivo central.",
+      descripcion: "Objetivo actualizado",
       titulo: newObj,
     });
 
@@ -290,7 +291,7 @@ export default function ObjectiveMain({ onNavigate }) {
   };
 
   /* ------------------------------------------
-     RENDER
+     UI PARA INVITADO
   ------------------------------------------ */
   if (!userId) {
     return (
@@ -306,14 +307,16 @@ export default function ObjectiveMain({ onNavigate }) {
 
         <div className="objective-card objective-guest-card">
           <p>
-            Para guardar tu objetivo central y ver tu progreso, conecta tu
-            cuenta desde el perfil.
+            Para definir y seguir tu objetivo central, inicia sesión desde el perfil.
           </p>
         </div>
       </div>
     );
   }
 
+  /* ------------------------------------------
+     LOADING
+  ------------------------------------------ */
   if (!loaded) {
     return (
       <div className="objective-page objective-loading">
@@ -322,9 +325,11 @@ export default function ObjectiveMain({ onNavigate }) {
     );
   }
 
+  /* ------------------------------------------
+     RENDER NORMAL
+  ------------------------------------------ */
   return (
     <div className="objective-page">
-      {/* HEADER */}
       <header className="objective-header">
         <button className="back-btn" onClick={() => onNavigate("profile")}>
           ←
@@ -335,9 +340,7 @@ export default function ObjectiveMain({ onNavigate }) {
         </div>
       </header>
 
-      {/* TARJETA PRINCIPAL */}
       <div className="objective-card">
-        {/* PROGRESO CIRCULAR */}
         <div className="progress-circle">
           <svg className="progress-svg">
             <defs>
@@ -372,7 +375,6 @@ export default function ObjectiveMain({ onNavigate }) {
         </button>
       </div>
 
-      {/* SUB-STEPS */}
       <section className="steps-section">
         <div className="steps-header-row">
           <h3>Pasos para lograrlo</h3>
@@ -404,7 +406,6 @@ export default function ObjectiveMain({ onNavigate }) {
         </div>
       </section>
 
-      {/* MOTIVACIÓN FINAL */}
       {motivation && (
         <section className="motivation-section">
           <div className="motivation-card">
@@ -414,7 +415,6 @@ export default function ObjectiveMain({ onNavigate }) {
         </section>
       )}
 
-      {/* MODALES */}
       <EditObjectiveModal
         isOpen={openEditModal}
         onClose={() => setOpenEditModal(false)}

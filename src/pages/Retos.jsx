@@ -27,7 +27,7 @@ function isSameDay(a, b) {
 
 function getWeekOfYear(d) {
   const start = new Date(d.getFullYear(), 0, 1);
-  return Math.ceil((((d - start) / 86400000) + start.getDay() + 1) / 7);
+  return Math.ceil(((d - start) / 86400000 + start.getDay() + 1) / 7);
 }
 
 function isSameWeek(a, b) {
@@ -38,10 +38,7 @@ function isSameWeek(a, b) {
 }
 
 function isSameMonth(a, b) {
-  return (
-    a.getFullYear() === b.getFullYear() &&
-    a.getMonth() === b.getMonth()
-  );
+  return a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth();
 }
 
 /* ------------------------------------------------
@@ -57,12 +54,18 @@ function getNivelFromXP(xp) {
 
 function getNivelTitle(n) {
   switch (n) {
-    case 1: return "Explorando tu camino";
-    case 2: return "Tomando ritmo";
-    case 3: return "Enfocado";
-    case 4: return "Constante";
-    case 5: return "Renaciendo";
-    default: return "";
+    case 1:
+      return "Explorando tu camino";
+    case 2:
+      return "Tomando ritmo";
+    case 3:
+      return "Enfocado";
+    case 4:
+      return "Constante";
+    case 5:
+      return "Renaciendo";
+    default:
+      return "";
   }
 }
 
@@ -110,7 +113,7 @@ function RetoCard({ tipo, etiqueta, reto, onComplete }) {
 /* ------------------------------------------------
    COMPONENTE PRINCIPAL RETOS
 ------------------------------------------------ */
-export default function Retos() {
+export default function Retos({ onNavigate }) {
   const { user } = useAuth();
   const userId = user?.uid || null;
 
@@ -131,9 +134,20 @@ export default function Retos() {
   const [retoSugerido, setRetoSugerido] = useState(null);
 
   /* ------------------------------------------------
-     ESCUCHAR AVANCE (solo tipo reto_completado)
+     ESCUCHAR AVANCE (solo tipo reto_completado y del usuario)
 ------------------------------------------------ */
   useEffect(() => {
+    if (!userId) {
+      setProgreso({
+        diario: 0,
+        semanal: 0,
+        mensual: 0,
+        total: 0,
+        xp: 0,
+      });
+      return;
+    }
+
     const col = collection(db, "historial");
 
     const unsub = onSnapshot(col, (snap) => {
@@ -148,16 +162,14 @@ export default function Retos() {
       snap.docs.forEach((d) => {
         const data = d.data();
 
-        if (userId) {
-          if (data.userId && data.userId !== userId) return;
-        }
-
+        // ✅ solo eventos del usuario actual
+        if (data.userId !== userId) return;
         if (data.tipo !== "reto_completado") return;
         if (data.area !== areaSeleccionada) return;
 
         let fecha = data.fecha;
         if (fecha?.toDate) fecha = fecha.toDate();
-        else if (fecha instanceof Date === false) fecha = new Date(fecha);
+        else if (!(fecha instanceof Date)) fecha = new Date(fecha);
         if (!fecha || isNaN(fecha.getTime())) return;
 
         if (data.frecuencia === "diario" && isSameDay(fecha, now)) {
@@ -202,6 +214,11 @@ export default function Retos() {
      RETO SUGERIDO
 ------------------------------------------------ */
   useEffect(() => {
+    if (!userId) {
+      setRetoSugerido(null);
+      return;
+    }
+
     let active = true;
 
     async function load() {
@@ -209,6 +226,7 @@ export default function Retos() {
         area: areaSeleccionada,
         progreso: { ...progreso, nivelArea: nivelActual },
         frecuencia: "diario",
+        userId,
       });
 
       if (active) setRetoSugerido(reto);
@@ -216,12 +234,18 @@ export default function Retos() {
 
     load();
     return () => (active = false);
-  }, [areaSeleccionada, progreso.xp, nivelActual]);
+  }, [areaSeleccionada, progreso.xp, nivelActual, userId]);
 
   /* ------------------------------------------------
-     COMPLETAR RETO (corregido sin duplicar historial)
+     COMPLETAR RETO
 ------------------------------------------------ */
   async function completarReto(tipo, reto) {
+    if (!userId) {
+      setMensaje("Debes iniciar sesión para completar retos.");
+      setTimeout(() => setMensaje(""), 2000);
+      return;
+    }
+
     try {
       const now = new Date();
       const localDay = new Date(
@@ -230,9 +254,8 @@ export default function Retos() {
         now.getDate()
       );
 
-      // SOLO SE REGISTRA UNA VEZ
       await addDoc(collection(db, "historial"), {
-        userId: userId || null,
+        userId,
         tipo: "reto_completado",
         titulo: reto.titulo,
         descripcion: reto.descripcion,
@@ -245,11 +268,9 @@ export default function Retos() {
         createdAt: serverTimestamp(),
       });
 
-      // Mensaje UI
       setMensaje("Reto completado ✔");
       setTimeout(() => setMensaje(""), 2000);
 
-      // Nivel up inmediato
       const xpAntes = progreso.xp;
       const xpExtra = tipo === "diario" ? 1 : tipo === "semanal" ? 2 : 3;
       const xpDespues = xpAntes + xpExtra;
@@ -259,7 +280,6 @@ export default function Retos() {
         setNivelSubido(nivelDespues);
         setShowLevelUp(true);
       }
-
     } catch (err) {
       console.error("Error completando reto:", err);
       setMensaje("No se pudo completar el reto");
@@ -270,6 +290,29 @@ export default function Retos() {
   /* ------------------------------------------------
      RENDER
 ------------------------------------------------ */
+  if (!userId) {
+    return (
+      <div className="retos-page retos-page-guest">
+        <div className="retos-banner">
+          <h2 className="retos-title">Retos</h2>
+          <p className="retos-sub">
+            Inicia sesión para que tus retos y tu progreso queden guardados
+            solo para ti.
+          </p>
+        </div>
+
+        {onNavigate && (
+          <button
+            className="reto-btn"
+            onClick={() => onNavigate("profile")}
+          >
+            Ir al perfil / iniciar sesión
+          </button>
+        )}
+      </div>
+    );
+  }
+
   return (
     <div className="retos-page">
       <div className="retos-banner">
@@ -325,13 +368,29 @@ export default function Retos() {
         <div className="medallas-row">
           <span className="progress-label">Medallas</span>
           <div className="medallas-chips">
-            <span className={`medalla-chip ${["bronce", "plata", "oro"].includes(medalla) ? "medalla-unlocked" : ""}`}>
+            <span
+              className={`medalla-chip ${
+                ["bronce", "plata", "oro"].includes(medalla)
+                  ? "medalla-unlocked"
+                  : ""
+              }`}
+            >
               🥉 Bronce
             </span>
-            <span className={`medalla-chip ${["plata", "oro"].includes(medalla) ? "medalla-unlocked" : ""}`}>
+            <span
+              className={`medalla-chip ${
+                ["plata", "oro"].includes(medalla)
+                  ? "medalla-unlocked"
+                  : ""
+              }`}
+            >
               🥈 Plata
             </span>
-            <span className={`medalla-chip ${medalla === "oro" ? "medalla-unlocked" : ""}`}>
+            <span
+              className={`medalla-chip ${
+                medalla === "oro" ? "medalla-unlocked" : ""
+              }`}
+            >
               🥇 Oro
             </span>
           </div>

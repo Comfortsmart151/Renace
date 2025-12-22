@@ -16,6 +16,7 @@ import {
 
 import SwipeActions from "../components/SwipeActions";
 import { useSwipeActions } from "../hooks/useSwipeActions";
+import { useAuth } from "../context/AuthContext";
 
 /* ----------------------------------------------------
    HELPERS DE FECHA
@@ -91,15 +92,24 @@ function SwipeCard({
 /* ----------------------------------------------------
    COMPONENTE PRINCIPAL
 ---------------------------------------------------- */
-export default function Historial() {
+export default function Historial({ onNavigate }) {
+  const { user, loginWithGoogle, loginWithApple } = useAuth();
+  const uid = user?.uid || null;
+
   const [intenciones, setIntenciones] = useState([]);
   const [retos, setRetos] = useState([]);
   const [tareas, setTareas] = useState([]);
 
-  /* 1. INTENCIONES */
+  /* 1. INTENCIONES DEL USUARIO */
   useEffect(() => {
+    if (!uid) {
+      setIntenciones([]);
+      return;
+    }
+
     const q = query(
       collection(db, "intenciones"),
+      where("userId", "==", uid),
       orderBy("fecha", "desc")
     );
 
@@ -110,34 +120,44 @@ export default function Historial() {
       }));
       setIntenciones(data);
     });
-  }, []);
+  }, [uid]);
 
   /* ----------------------------------------------------
-     2. RETOS — AHORA UNIFICAMOS reto + reto_completado
+     2. RETOS
   ---------------------------------------------------- */
-
   useEffect(() => {
+    if (!uid) {
+      setRetos([]);
+      return;
+    }
+
     const q = query(
       collection(db, "historial"),
-      where("tipo", "in", ["reto", "reto_completado"]), // 🔥 FIX
+      where("userId", "==", uid),
+      where("tipo", "in", ["reto", "reto_completado"]),
       orderBy("fecha", "desc")
     );
 
     return onSnapshot(q, (snapshot) => {
       const data = snapshot.docs.map((d) => ({
         id: d.id,
-        // 🔥 Unificar nombres: todo será tratado como "reto"
         tipo: "reto",
         ...d.data(),
       }));
       setRetos(data);
     });
-  }, []);
+  }, [uid]);
 
   /* 3. TAREAS COMPLETADAS */
   useEffect(() => {
+    if (!uid) {
+      setTareas([]);
+      return;
+    }
+
     const q = query(
       collection(db, "historial"),
+      where("userId", "==", uid),
       where("tipo", "==", "tarea"),
       orderBy("fecha", "desc")
     );
@@ -149,7 +169,7 @@ export default function Historial() {
       }));
       setTareas(data);
     });
-  }, []);
+  }, [uid]);
 
   /* ----------------------------------------------------
      ACCIONES — ARCHIVAR / ELIMINAR
@@ -212,10 +232,9 @@ export default function Historial() {
       });
     });
 
-    // RETOS (ya unificados)
+    // RETOS
     retos.forEach((r) => {
       if (!r.fecha) return;
-
       eventos.push({
         id: r.id,
         tipo: "reto",
@@ -228,10 +247,8 @@ export default function Historial() {
 
     if (eventos.length === 0) return [];
 
-    // ORDEN
     eventos.sort((a, b) => b.fechaMs - a.fechaMs);
 
-    // AGRUPAR
     const sections = [];
     eventos.forEach((ev) => {
       const label = getDayLabel(ev.fechaTs);
@@ -249,20 +266,51 @@ export default function Historial() {
   }, [intenciones, tareas, retos]);
 
   /* ----------------------------------------------------
-     RENDER
+     INVITADO
   ---------------------------------------------------- */
-  const renderIcon = (tipo) => {
-    if (tipo === "intencion") return "✨";
-    if (tipo === "tarea") return "✅";
-    return "🏆";
-  };
+  if (!uid) {
+    return (
+      <div className="historial-page">
+        <div className="historial-guest-wrapper">
+          <div className="historial-guest-box">
+            <h2 className="historial-guest-title">Historial</h2>
+            <p className="historial-guest-text">
+              Inicia sesión para ver tu historial personal de logros,
+              intenciones, tareas y retos.
+            </p>
 
-  const renderTipoLabel = (tipo, archivado) => {
-    if (tipo === "intencion") return archivado ? "Intención archivada" : "Intención";
-    if (tipo === "tarea") return "Tarea completada";
-    return "Reto completado";
-  };
+            {/* GOOGLE */}
+            <button className="historial-login-btn" onClick={loginWithGoogle}>
+              <img
+                src="/icons/google.png"
+                alt="google"
+                className="google-icon"
+                style={{ marginRight: "6px" }}
+              />
+              Iniciar con Google
+            </button>
 
+            {/* APPLE */}
+            <button className="historial-login-btn" onClick={loginWithApple}>
+               Iniciar con Apple
+            </button>
+
+            {/* CONFIG O PERFIL */}
+            <button
+              className="historial-login-btn"
+              onClick={() => onNavigate("profile")}
+            >
+              Ir al perfil
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  /* ----------------------------------------------------
+     LOGGED IN
+  ---------------------------------------------------- */
   return (
     <div className="historial-page">
       <h2 className="historial-title">Historial</h2>
@@ -303,11 +351,21 @@ export default function Historial() {
                     }`}
                   >
                     <div className="timeline-card-top">
-                      <div className="timeline-icon">{renderIcon(ev.tipo)}</div>
+                      <div className="timeline-icon">
+                        {ev.tipo === "intencion" && "✨"}
+                        {ev.tipo === "tarea" && "📝"}
+                        {ev.tipo === "reto" && "🎯"}
+                      </div>
 
                       <div className="timeline-top-text">
                         <span className="timeline-type">
-                          {renderTipoLabel(ev.tipo, ev.archivado)}
+                          {isIntencion
+                            ? ev.archivado
+                              ? "Intención archivada"
+                              : "Intención"
+                            : isReto
+                            ? "Reto completado"
+                            : "Tarea completada"}
                         </span>
 
                         <span className="timeline-date">
